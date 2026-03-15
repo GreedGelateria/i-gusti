@@ -1,9 +1,16 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I Gusti — GREED Gelateria Naturale</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Firebase COMPAT (non ESM - funziona su tutti i browser e WordPress) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- QR Code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#1a2e1c;--bg2:#213524;--bg3:#263d29;
@@ -334,8 +341,9 @@ footer{background:var(--bg);padding:36px 5vw 22px;border-top:1px solid var(--bor
   .cart-dr{width:100%}
   .pb-right{display:none}
 }
-
 </style>
+</head>
+<body>
 
 <!-- Firebase COMPAT init -->
 <script>
@@ -362,6 +370,17 @@ db.collection('config').doc('promozioni').get().then(function(s){
 }).catch(function(){ document.dispatchEvent(new Event('promoPronte')); });
 </script>
 
+<!-- NAV -->
+<nav id="gnav" style="background:rgba(26,46,28,.97);padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(247,207,69,.25);flex-wrap:wrap;gap:12px">
+  <a href="https://gelateriagreed.it/" style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;letter-spacing:.14em;color:#f5f0e8;text-decoration:none">GREED</a>
+  <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+    <a href="https://gelateriagreed.it/" style="color:rgba(245,240,232,.88);text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase">Home</a>
+    <a href="https://gelateriagreed.it/la-nostra-filosofia/" style="color:rgba(245,240,232,.88);text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase">Filosofia</a>
+    <a href="https://gelateriagreed.it/la-storia/" style="color:rgba(245,240,232,.88);text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase">La Storia</a>
+    <a href="https://gelateriagreed.it/blog/" style="color:rgba(245,240,232,.88);text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase">Blog</a>
+    <a href="https://gelateriagreed.it/dove-siamo/" style="color:rgba(245,240,232,.88);text-decoration:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase">Dove Siamo</a>
+  </div>
+</nav>
 <div class="greed-page">
 
 <!-- Promo ticker fisso in cima -->
@@ -1176,3 +1195,5 @@ function doCheckout(){ if(!carrello.length) return; var tot=carrello.reduce(func
 /* Admin shortcut */
 document.addEventListener('keydown',function(e){ if(e.ctrlKey&&e.shiftKey&&e.key==='G'){ localStorage.setItem('ga','1'); document.getElementById('adminBar').classList.add('show'); alert('Admin attivato (Ctrl+Shift+G)'); } });
 </script>
+</body>
+</html>
