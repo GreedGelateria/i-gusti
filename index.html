@@ -48,7 +48,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .admin-bar.show{display:flex}
 .admin-bar span{font-size:11px;color:var(--gold);letter-spacing:.06em}
 .btn-adm{background:transparent;border:1px solid var(--gold-bd);color:var(--gold);padding:6px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .2s}
-.btn-adm:hover{background:var(--gold);color:var(--bg)}
+.btn-adm:hover,.btn-adm.on{background:var(--gold);color:var(--bg)}
 
 /* HERO */
 .hero{background:linear-gradient(135deg,var(--bg) 0%,var(--bg3) 100%);padding:70px 5vw 60px;position:relative;overflow:hidden}
@@ -82,7 +82,22 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .sec-hd h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,3vw,34px);font-weight:300;white-space:nowrap}
 .sec-hd h2 em{font-style:italic;color:var(--gold-l)}
 
-/* GRIGLIA GUSTI — sempre visibile */
+/* HERO LOGIN (per visitatori non loggati) */
+.hero-login{background:var(--bg2);border:1px solid var(--gold-bd);border-radius:3px;padding:48px 40px;text-align:center;margin-bottom:0}
+.hl-icon{font-size:52px;display:block;margin-bottom:16px}
+.hl-h{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:300;margin-bottom:10px}
+.hl-h em{font-style:italic;color:var(--gold-l)}
+.hl-p{font-size:14px;color:var(--cream2);margin-bottom:28px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto}
+.hl-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.btn-hl-reg{background:var(--gold);color:var(--bg);border:none;padding:15px 36px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .25s}
+.btn-hl-reg:hover{background:var(--gold-l);transform:translateY(-1px)}
+.btn-hl-login{background:transparent;color:var(--gold);border:2px solid var(--gold-bd);padding:15px 36px;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .25s}
+.btn-hl-login:hover{background:var(--gold-bg);border-color:var(--gold)}
+.hl-vantaggi{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.hlv{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--cream2)}
+.hlv span:first-child{font-size:16px}
+
+/* GRIGLIA GUSTI */
 .gusti-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px;margin-bottom:40px}
 .gc{background:var(--bg2);border:1px solid var(--border2);padding:20px 14px;text-align:center;border-radius:3px;transition:all .2s;position:relative;overflow:hidden}
 .gc:hover{border-color:var(--gold-bd);background:var(--gold-bg);transform:translateY(-2px)}
@@ -90,31 +105,34 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .gc-n{font-size:13px;color:var(--cream);line-height:1.3;font-weight:400}
 .gc-off{position:absolute;top:7px;right:7px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.06em;text-transform:uppercase}
 
-/* PANNELLO ADMIN GUSTI — compatto, inline */
-.admin-gusti-panel{background:var(--bg3);border:1px solid var(--gold-bd);border-radius:3px;padding:22px;margin-bottom:32px;display:none}
-.admin-gusti-panel.open{display:block}
-.agp-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.agp-hd h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
-.agp-hd h3 em{font-style:italic;color:var(--gold-l)}
-.agp-hd p{font-size:12px;color:var(--cream2);margin-top:2px}
-.gl{display:flex;flex-direction:column;gap:6px;max-height:380px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
+/* ADMIN PANNELLI */
+.admin-panel{background:var(--bg3);border:1px solid var(--gold-bd);border-radius:3px;padding:22px;margin-bottom:28px;display:none}
+.admin-panel.open{display:block}
+.ap-hd{margin-bottom:16px}
+.ap-hd h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
+.ap-hd h3 em{font-style:italic;color:var(--gold-l)}
+.ap-hd p{font-size:12px;color:var(--cream2);margin-top:3px}
+
+/* Lista gusti admin */
+.gl{display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
 .gl::-webkit-scrollbar{width:3px}
 .gl::-webkit-scrollbar-thumb{background:var(--gold-bd);border-radius:2px}
 .gi{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border2);padding:9px 12px;border-radius:2px}
 .gi.off{opacity:.5}
 .sw{width:38px;height:22px;position:relative;cursor:pointer;flex-shrink:0}
-.sw input{opacity:0;width:0;height:0}
-.sw-t{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:11px;transition:.2s}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-t{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:11px;transition:.2s;cursor:pointer}
 .sw-t::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:var(--cream3);border-radius:50%;transition:.2s}
 .sw input:checked+.sw-t{background:var(--gold)}
 .sw input:checked+.sw-t::before{transform:translateX(16px);background:var(--bg)}
 .gi-e{width:36px;background:rgba(255,255,255,.06);border:1px solid var(--border2);color:var(--cream);text-align:center;font-size:16px;padding:3px;border-radius:2px;outline:none}
-.gi-n{flex:1;background:transparent;border:none;color:var(--cream);font-family:'Outfit',sans-serif;font-size:13px;outline:none}
+.gi-n{flex:1;background:var(--bg2);border:1px solid var(--border2);color:var(--cream);font-family:'Outfit',sans-serif;font-size:13px;outline:none;padding:5px 8px;border-radius:2px}
+.gi-n:focus{border-color:var(--gold-bd)}
 .gi-o{background:none;border:1px solid var(--border2);color:var(--cream3);border-radius:2px;width:28px;height:28px;cursor:pointer;font-size:13px;transition:all .2s;flex-shrink:0}
 .gi-o.on{background:var(--red-bg);border-color:var(--red-bd);color:var(--red)}
 .gi-d{background:none;border:none;color:rgba(220,80,80,.5);cursor:pointer;font-size:14px;padding:0 3px;flex-shrink:0}
 .gi-d:hover{color:var(--red)}
-.agp-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ap-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .btn-add{background:var(--gold-bg);border:1px solid var(--gold-bd);color:var(--gold);padding:9px 16px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .2s}
 .btn-add:hover{background:var(--gold);color:var(--bg)}
 .btn-save{background:var(--gold);color:var(--bg);border:none;padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .2s}
@@ -122,16 +140,31 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .sok{font-size:12px;color:var(--gold);display:none;margin-left:6px}
 .sok.show{display:inline}
 
-/* CTA ORDINE per visitatori non loggati */
-.cta-accedi{background:var(--bg2);border:1px solid var(--gold-bd);border-radius:3px;padding:36px 40px;text-align:center;margin-bottom:40px}
-.cta-accedi h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;margin-bottom:8px}
-.cta-accedi h3 em{font-style:italic;color:var(--gold-l)}
-.cta-accedi p{font-size:13px;color:var(--cream2);margin-bottom:22px;line-height:1.6}
-.cta-accedi-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.btn-cta-reg{background:var(--gold);color:var(--bg);border:none;padding:14px 32px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .25s}
-.btn-cta-reg:hover{background:var(--gold-l);transform:translateY(-1px)}
-.btn-cta-login{background:transparent;color:var(--gold);border:1px solid var(--gold-bd);padding:14px 32px;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:'Outfit',sans-serif;transition:all .25s}
-.btn-cta-login:hover{background:var(--gold-bg)}
+/* Promozioni admin */
+.plist{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.pi{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:2px;padding:11px 14px;display:flex;align-items:center;gap:12px}
+.pi.on{border-color:var(--gold-bd);background:var(--gold-bg)}
+.pi-info{flex:1}
+.pi-nome{font-size:13px;color:var(--cream);font-weight:500}
+.pi-det{font-size:11px;color:var(--cream2);margin-top:2px}
+.pi-b{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.06em;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
+.pi-b.on{background:var(--gold);color:var(--bg)}
+.pi-b.off{background:rgba(255,255,255,.1);color:var(--cream3)}
+.pi-d{background:none;border:none;color:rgba(220,80,80,.5);cursor:pointer;font-size:14px;padding:0 4px}
+.pi-d:hover{color:var(--red)}
+.pf-r{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.pf-g{display:flex;flex-direction:column;gap:4px}
+.pf-g label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream2)}
+.pf-g input,.pf-g select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--cream);padding:10px 12px;font-family:'Outfit',sans-serif;font-size:13px;outline:none;border-radius:2px;transition:border .2s}
+.pf-g input:focus,.pf-g select:focus{border-color:var(--gold-bd)}
+.pf-g select option{background:var(--bg2)}
+.pf-g input[type=range]{padding:4px 0;accent-color:var(--gold)}
+.giorni-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.gcb{display:none}
+.glbl{display:flex;align-items:center;justify-content:center;width:40px;height:34px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:2px;cursor:pointer;font-size:11px;font-weight:500;color:var(--cream3);transition:all .2s;user-select:none}
+.gcb:checked+.glbl{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700}
+.promo-prev{background:var(--gold);color:var(--bg);padding:10px 14px;border-radius:2px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;margin-top:10px}
+.pf-box{background:rgba(255,255,255,.03);border:1px solid var(--border2);padding:18px;border-radius:3px;margin-bottom:14px}
 
 /* AUTH */
 .auth-wrap{max-width:540px;margin:0 auto 44px;display:none}
@@ -223,26 +256,19 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .slot-a{color:var(--cream2);font-size:11px;flex-shrink:0;pointer-events:none}
 .slots-info{font-size:12px;color:var(--cream2);text-align:center;padding:9px;border:1px dashed var(--border);border-radius:3px;margin-top:6px}
 .slots-info b{color:var(--gold)}
-.extras{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.extra-c{background:rgba(255,255,255,.04);border:2px solid var(--border);padding:16px;border-radius:3px;cursor:pointer;transition:all .22s;text-align:center}
+.extras{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.extra-c{background:rgba(255,255,255,.04);border:2px solid var(--border);padding:14px;border-radius:3px;cursor:pointer;transition:all .22s;text-align:center}
 .extra-c:hover,.extra-c.sel{border-color:var(--gold);background:var(--gold-bg)}
-.ex-em{font-size:24px;display:block;margin-bottom:6px}
-.ex-n{font-size:13px;color:var(--cream);font-weight:400}
-.ex-note{font-size:11px;color:var(--cream2);margin-top:3px}
+.ex-em{font-size:22px;display:block;margin-bottom:6px}
+.ex-n{font-size:12px;color:var(--cream);font-weight:500}
+.ex-note{font-size:11px;color:var(--gold);margin-top:3px;font-weight:600}
 .ex-chk{font-size:11px;color:var(--gold);font-weight:700;margin-top:4px;opacity:0;transition:opacity .2s}
 .extra-c.sel .ex-chk{opacity:1}
-.coni{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.cono-c{background:rgba(255,255,255,.04);border:2px solid var(--border);padding:12px 8px;border-radius:3px;cursor:pointer;transition:all .22s;text-align:center}
-.cono-c:hover,.cono-c.sel{border-color:var(--gold);background:var(--gold-bg)}
-.cn-em{font-size:20px;display:block;margin-bottom:4px}
-.cn-n{font-size:11px;color:var(--cream2)}
-.cono-c.sel .cn-n{color:var(--gold);font-weight:500}
-.ex-lbl{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--cream2);margin:12px 0 7px}
 .note-ta{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--cream);padding:12px 14px;font-family:'Outfit',sans-serif;font-size:13px;resize:vertical;min-height:70px;outline:none;border-radius:3px;transition:border .2s}
 .note-ta:focus{border-color:var(--gold-bd)}
 .note-ta::placeholder{color:var(--cream2)}
 
-/* CARRELLO DRAWER */
+/* CARRELLO */
 .cart-ov{position:fixed;inset:0;background:rgba(20,35,22,.75);z-index:499;opacity:0;pointer-events:none;transition:opacity .3s}
 .cart-ov.show{opacity:1;pointer-events:all}
 .cart-dr{position:fixed;right:0;top:0;bottom:0;width:360px;background:var(--bg2);border-left:1px solid var(--border);z-index:500;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.4)}
@@ -250,14 +276,12 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .cart-hd{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .cart-hd h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
 .cart-hd h3 em{font-style:italic;color:var(--gold-l)}
-.cart-x{background:none;border:none;color:var(--cream2);font-size:20px;cursor:pointer;line-height:1;transition:color .2s}
+.cart-x{background:none;border:none;color:var(--cream2);font-size:20px;cursor:pointer;line-height:1}
 .cart-x:hover{color:var(--gold)}
 .cart-bd{flex:1;overflow-y:auto;padding:14px 20px}
 .cart-empty{text-align:center;padding:40px 12px;color:var(--cream3)}
 .ce-icon{font-size:34px;display:block;margin-bottom:10px}
-.cart-empty p{font-size:13px;line-height:1.6}
 .cart-promo{background:var(--red-bg);border:1px solid var(--red-bd);border-radius:2px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:#f09080}
-.cart-promo b{color:var(--red)}
 .ci{background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:13px;margin-bottom:9px}
 .ci-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:7px}
 .ci-nome{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:400}
@@ -272,39 +296,12 @@ body{background:var(--bg);color:var(--cream);font-family:'Outfit',sans-serif;fon
 .cart-tot{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .ct-lbl{font-size:13px;color:var(--cream2)}
 .ct-val{font-family:'Cormorant Garamond',serif;font-size:30px;color:var(--gold)}
-.ct-risp{font-size:11px;color:var(--green);text-align:right;margin-top:2px;margin-bottom:10px;display:none}
+.ct-risp{font-size:11px;color:var(--green);margin-top:2px;margin-bottom:10px;display:none}
 .btn-altro{width:100%;background:transparent;border:1px solid var(--border2);color:var(--cream2);padding:10px;font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;border-radius:2px;transition:all .2s;margin-bottom:9px}
 .btn-altro:hover{border-color:var(--gold-bd);color:var(--gold)}
 .btn-checkout{width:100%;background:var(--gold);color:var(--bg);border:none;padding:14px;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;font-family:'Outfit',sans-serif;border-radius:2px;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px}
 .btn-checkout:hover{background:var(--gold-l)}
 .cart-note{text-align:center;font-size:11px;color:var(--cream2);margin-top:7px}
-
-/* ADMIN PROMOZIONI (tab separato) */
-.admin-promo-panel{background:var(--bg3);border:1px solid var(--gold-bd);border-radius:3px;padding:22px;margin-bottom:32px;display:none}
-.admin-promo-panel.open{display:block}
-.pf-r{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.pf-g{display:flex;flex-direction:column;gap:4px}
-.pf-g label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--cream2)}
-.pf-g input,.pf-g select{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--cream);padding:10px 12px;font-family:'Outfit',sans-serif;font-size:13px;outline:none;border-radius:2px;transition:border .2s}
-.pf-g input:focus,.pf-g select:focus{border-color:var(--gold-bd)}
-.pf-g select option{background:var(--bg2)}
-.pf-g input[type=range]{padding:4px 0;accent-color:var(--gold)}
-.giorni-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
-.gcb{display:none}
-.glbl{display:flex;align-items:center;justify-content:center;width:40px;height:34px;background:rgba(255,255,255,.05);border:1px solid var(--border2);border-radius:2px;cursor:pointer;font-size:11px;font-weight:500;color:var(--cream3);transition:all .2s;user-select:none}
-.gcb:checked+.glbl{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700}
-.promo-prev{background:var(--gold);color:var(--bg);padding:10px 14px;border-radius:2px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;margin-top:10px}
-.plist{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.pi{background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:2px;padding:11px 14px;display:flex;align-items:center;gap:12px}
-.pi.on{border-color:var(--gold-bd);background:var(--gold-bg)}
-.pi-info{flex:1}
-.pi-nome{font-size:13px;color:var(--cream);font-weight:500}
-.pi-det{font-size:11px;color:var(--cream2);margin-top:2px}
-.pi-b{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;letter-spacing:.06em;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
-.pi-b.on{background:var(--gold);color:var(--bg)}
-.pi-b.off{background:rgba(255,255,255,.1);color:var(--cream3)}
-.pi-d{background:none;border:none;color:rgba(220,80,80,.5);cursor:pointer;font-size:14px;padding:0 4px}
-.pi-d:hover{color:var(--red)}
 
 footer{background:var(--bg);padding:32px 5vw 20px;border-top:1px solid var(--border2);margin-top:40px}
 .ft{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:18px}
@@ -317,12 +314,13 @@ footer{background:var(--bg);padding:32px 5vw 20px;border-top:1px solid var(--bor
 .fc{font-size:11px;color:var(--cream2)}
 
 @media(max-width:640px){
-  .vaschette,.extras{grid-template-columns:1fr}
-  .coni{grid-template-columns:1fr 1fr}
+  .vaschette{grid-template-columns:1fr}
+  .extras{grid-template-columns:1fr}
   .fg{grid-template-columns:1fr}
   .pf-r{grid-template-columns:1fr}
   .cart-dr{width:100%}
   .gnav-links{display:none}
+  .hl-btns{flex-direction:column;align-items:center}
 }
 </style>
 </head>
@@ -338,14 +336,12 @@ firebase.initializeApp({
   appId:"1:704669833762:web:917f4c7b104bc8ad39087b"
 });
 var db=firebase.firestore();
-db.collection('config').doc('gusti').get().then(function(s){
-  if(s.exists&&s.data().lista) window.GUSTI=s.data().lista;
-  document.dispatchEvent(new Event('gustiPronti'));
-}).catch(function(){document.dispatchEvent(new Event('gustiPronti'));});
-db.collection('config').doc('promozioni').get().then(function(s){
-  if(s.exists&&s.data().lista) window.PROMOZIONI=s.data().lista;
-  document.dispatchEvent(new Event('promoPronte'));
-}).catch(function(){document.dispatchEvent(new Event('promoPronte'));});
+db.collection('config').doc('gusti').get()
+  .then(function(s){if(s.exists&&s.data().lista)window.GUSTI=s.data().lista;})
+  .catch(function(){});
+db.collection('config').doc('promozioni').get()
+  .then(function(s){if(s.exists&&s.data().lista)window.PROMOZIONI=s.data().lista;avviaPromo();})
+  .catch(function(){});
 </script>
 
 <!-- PROMO TICKER -->
@@ -365,17 +361,15 @@ db.collection('config').doc('promozioni').get().then(function(s){
     <a href="https://gelateriagreed.it/blog/">Blog</a>
     <a href="https://gelateriagreed.it/dove-siamo/">Dove Siamo</a>
   </div>
-  <div class="gnav-right" id="navRight">
-    <!-- Popolato dal JS se loggato -->
-  </div>
+  <div class="gnav-right" id="navRight"></div>
 </nav>
 
 <!-- ADMIN BAR -->
 <div class="admin-bar" id="adminBar">
-  <span>⚙ Admin — Gestisci gusti e promozioni</span>
+  <span>⚙ Modalità amministratore</span>
   <div style="display:flex;gap:8px">
-    <button class="btn-adm" onclick="togglePanel('gusti')">🍦 Modifica gusti</button>
-    <button class="btn-adm" onclick="togglePanel('promo')">🔥 Promozioni</button>
+    <button class="btn-adm" id="btnAdmGusti" onclick="togglePanel('gusti')">🍦 Modifica gusti</button>
+    <button class="btn-adm" id="btnAdmPromo" onclick="togglePanel('promo')">🔥 Promozioni</button>
   </div>
 </div>
 
@@ -383,9 +377,9 @@ db.collection('config').doc('promozioni').get().then(function(s){
 <section class="hero">
   <p class="hero-ey">GREED · Gelateria Naturale · Frascati</p>
   <h1 class="hero-h1">I nostri<br><em>gusti</em></h1>
-  <p class="hero-sub">Materie prime selezionate, territorio laziale, stagioni rispettate. Ogni vaschetta preparata fresca.</p>
+  <p class="hero-sub">Materie prime selezionate, territorio laziale, stagioni rispettate. Ogni vaschetta preparata fresca al momento.</p>
   <div class="hero-pills">
-    <span class="hpill" id="pillN">🍨 Caricamento...</span>
+    <span class="hpill">🍨 Gelato naturale</span>
     <span class="hpill">🌿 Senza glutine <b>AIC</b></span>
     <span class="hpill">📍 Piazza Roma 16, Frascati</span>
   </div>
@@ -407,33 +401,33 @@ db.collection('config').doc('promozioni').get().then(function(s){
 
 <div class="main">
 
-  <!-- PANNELLO ADMIN GUSTI -->
-  <div class="admin-gusti-panel" id="panelGusti">
-    <div class="agp-hd">
-      <div>
-        <h3>Modifica <em>gusti disponibili</em></h3>
-        <p>Attiva/disattiva · Modifica nomi · 🏷 segna in offerta</p>
-      </div>
+  <!-- ADMIN: PANNELLO GUSTI -->
+  <div class="admin-panel" id="panelGusti">
+    <div class="ap-hd">
+      <h3>Modifica <em>gusti disponibili</em></h3>
+      <p>Attiva/disattiva il toggle · Clicca sul campo testo per modificare · 🏷 segna in offerta</p>
     </div>
     <div class="gl" id="gl"></div>
-    <div class="agp-actions">
-      <button class="btn-add" onclick="addGusto()">+ Aggiungi</button>
+    <div class="ap-actions">
+      <button class="btn-add" onclick="addGusto()">+ Aggiungi gusto</button>
       <button class="btn-save" onclick="saveGusti()">💾 Salva su Firebase</button>
       <span class="sok" id="sokG">✓ Salvato!</span>
     </div>
   </div>
 
-  <!-- PANNELLO ADMIN PROMOZIONI -->
-  <div class="admin-promo-panel" id="panelPromo">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-      <div>
-        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300">Promozioni & <em style="font-style:italic;color:var(--gold-l)">offerte</em></h3>
-        <p style="font-size:12px;color:var(--cream2);margin-top:2px">Fasce orarie automatiche o offerte spot manuali</p>
-      </div>
+  <!-- ADMIN: PANNELLO PROMOZIONI -->
+  <div class="admin-panel" id="panelPromo">
+    <div class="ap-hd">
+      <h3>Promozioni & <em>offerte</em></h3>
+      <p>Fasce orarie automatiche (si attivano da soli) o spot (attivi/disattivi tu manualmente)</p>
     </div>
-    <div class="plist" id="plist"></div>
-    <div style="background:rgba(255,255,255,.03);border:1px solid var(--border2);padding:18px;border-radius:3px;margin-bottom:14px">
-      <p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Nuova promozione</p>
+
+    <!-- Lista promo attive -->
+    <div class="plist" id="plist"><div style="font-size:12px;color:var(--cream3);padding:8px 0">Nessuna promozione creata.</div></div>
+
+    <!-- Form nuova promo -->
+    <div class="pf-box">
+      <p style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">+ Nuova promozione</p>
       <div class="pf-r">
         <div class="pf-g"><label>Titolo</label><input type="text" id="pTit" placeholder="es: Happy Hour Mattina"></div>
         <div class="pf-g"><label>Descrizione</label><input type="text" id="pDes" placeholder="es: 20% di sconto dalle 10 alle 11"></div>
@@ -442,10 +436,11 @@ db.collection('config').doc('promozioni').get().then(function(s){
         <div class="pf-g"><label>Tipo</label>
           <select id="pTipo" onchange="onTipo()">
             <option value="fascia">⏰ Fascia oraria automatica</option>
-            <option value="spot">🔴 Spot (manuale)</option>
+            <option value="spot">🔴 Spot (attivi/disattivi manualmente)</option>
           </select>
         </div>
-        <div class="pf-g"><label>Sconto: <b id="pScV" style="color:var(--gold)">20%</b></label>
+        <div class="pf-g">
+          <label>Sconto: <b id="pScV" style="color:var(--gold)">20%</b></label>
           <input type="range" id="pSc" min="5" max="50" step="5" value="20" oninput="document.getElementById('pScV').textContent=this.value+'%';aggPrev()">
         </div>
       </div>
@@ -453,46 +448,50 @@ db.collection('config').doc('promozioni').get().then(function(s){
         <div class="pf-g"><label>Ora inizio</label><input type="time" id="pOi" value="10:00" oninput="aggPrev()"></div>
         <div class="pf-g"><label>Ora fine</label><input type="time" id="pOf" value="11:00" oninput="aggPrev()"></div>
       </div>
-      <div id="pGiorni" style="margin-bottom:10px">
-        <div class="pf-g"><label>Giorni attivi</label>
+      <div id="pGiorni">
+        <div class="pf-g" style="margin-bottom:10px">
+          <label>Giorni attivi (spunta quelli in cui vuoi la promozione)</label>
           <div class="giorni-wrap">
-            <input type="checkbox" class="gcb" id="gL" value="Lun" checked><label class="glbl" for="gL">Lun</label>
-            <input type="checkbox" class="gcb" id="gM" value="Mar" checked><label class="glbl" for="gM">Mar</label>
-            <input type="checkbox" class="gcb" id="gMe" value="Mer" checked><label class="glbl" for="gMe">Mer</label>
-            <input type="checkbox" class="gcb" id="gG" value="Gio" checked><label class="glbl" for="gG">Gio</label>
-            <input type="checkbox" class="gcb" id="gV" value="Ven" checked><label class="glbl" for="gV">Ven</label>
-            <input type="checkbox" class="gcb" id="gS" value="Sab" checked><label class="glbl" for="gS">Sab</label>
-            <input type="checkbox" class="gcb" id="gD" value="Dom" checked><label class="glbl" for="gD">Dom</label>
+            <input type="checkbox" class="gcb" id="gL" checked><label class="glbl" for="gL">Lun</label>
+            <input type="checkbox" class="gcb" id="gM" checked><label class="glbl" for="gM">Mar</label>
+            <input type="checkbox" class="gcb" id="gMe" checked><label class="glbl" for="gMe">Mer</label>
+            <input type="checkbox" class="gcb" id="gG" checked><label class="glbl" for="gG">Gio</label>
+            <input type="checkbox" class="gcb" id="gV" checked><label class="glbl" for="gV">Ven</label>
+            <input type="checkbox" class="gcb" id="gS" checked><label class="glbl" for="gS">Sab</label>
+            <input type="checkbox" class="gcb" id="gD" checked><label class="glbl" for="gD">Dom</label>
           </div>
         </div>
       </div>
       <div class="pf-r">
         <div class="pf-g"><label>Emoji</label><input type="text" id="pEm" value="🔥" maxlength="2" oninput="aggPrev()"></div>
       </div>
-      <div class="promo-prev" id="pPrev"><span id="pPrevIco">🔥</span><span id="pPrevTxt">Sconto 20% · 10:00–11:00</span></div>
+      <div class="promo-prev"><span id="pPrevIco">🔥</span><span id="pPrevTxt">Sconto 20% · 10:00–11:00 · Tutti i giorni</span></div>
       <div style="margin-top:12px"><button class="btn-save" onclick="addPromo()">+ Aggiungi promozione</button></div>
     </div>
-    <button class="btn-save" onclick="savePromo()">💾 Salva su Firebase</button>
+    <button class="btn-save" onclick="savePromo()">💾 Salva tutto su Firebase</button>
     <span class="sok" id="sokP">✓ Salvato!</span>
   </div>
 
-  <!-- GRIGLIA GUSTI — sempre visibile a tutti -->
-  <div class="sec-hd"><h2>I gusti di <em>oggi</em></h2></div>
-  <div class="gusti-grid" id="gustiGrid">
-    <div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--cream2);font-size:13px">Caricamento gusti...</div>
-  </div>
-
-  <!-- CTA PER VISITATORI NON LOGGATI -->
-  <div class="cta-accedi" id="ctaAccedi">
-    <h3>Ordina la tua <em>vaschetta</em></h3>
-    <p>Registrati gratuitamente per ordinare online, saltare la fila e ricevere il tuo QR personale.<br>Ci vogliono 30 secondi.</p>
-    <div class="cta-accedi-btns">
-      <button class="btn-cta-reg" onclick="apriAuth('reg')">⚡ Registrati gratis</button>
-      <button class="btn-cta-login" onclick="apriAuth('login')">Ho già un account →</button>
+  <!-- SEZIONE VISITATORI NON LOGGATI -->
+  <div id="secVisitatore">
+    <div class="hero-login">
+      <span class="hl-icon">🍦</span>
+      <h2 class="hl-h">Scopri i nostri <em>gusti</em></h2>
+      <p class="hl-p">Registrati gratuitamente per vedere i gusti di oggi, ordinare la tua vaschetta e saltare la fila. Ci vogliono 30 secondi.</p>
+      <div class="hl-btns">
+        <button class="btn-hl-reg" onclick="apriAuth('reg')">⚡ Registrati gratis</button>
+        <button class="btn-hl-login" onclick="apriAuth('login')">Ho già un account →</button>
+      </div>
+      <div class="hl-vantaggi">
+        <span class="hlv"><span>🎁</span><span>10 punti di benvenuto</span></span>
+        <span class="hlv"><span>⚡</span><span>Salta la fila</span></span>
+        <span class="hlv"><span>🎂</span><span>Regalo di compleanno</span></span>
+        <span class="hlv"><span>🔖</span><span>QR personale</span></span>
+      </div>
     </div>
   </div>
 
-  <!-- AUTH FORM (appare quando si clicca) -->
+  <!-- AUTH FORM -->
   <div class="auth-wrap" id="authWrap">
     <div class="auth-card">
       <div class="auth-tabs">
@@ -503,11 +502,8 @@ db.collection('config').doc('promozioni').get().then(function(s){
       <!-- REGISTRAZIONE -->
       <div id="tReg" class="auth-body">
         <h3>Benvenuto, <em>registrati</em></h3>
-        <p class="auth-sub">Account gratuito. Ricevi il tuo QR personale e accumula punti fedeltà.</p>
-        <div class="pfid">
-          <span class="ic">🎁</span>
-          <p>Entri automaticamente nella <strong>Carta Fedeltà GREED</strong>: punti ad ogni acquisto e regalo di compleanno.</p>
-        </div>
+        <p class="auth-sub">Account gratuito in 30 secondi. Ricevi il tuo QR personale e accumula punti fedeltà.</p>
+        <div class="pfid"><span class="ic">🎁</span><p>Entri nella <strong>Carta Fedeltà GREED</strong>: punti ad ogni acquisto e regalo di compleanno.</p></div>
         <div class="aerr" id="regErr"></div>
         <form onsubmit="doReg(event)">
           <div class="fg">
@@ -534,12 +530,10 @@ db.collection('config').doc('promozioni').get().then(function(s){
         <div class="aerr" id="loginErr"></div>
         <form onsubmit="doLogin(event)">
           <div class="fg" style="grid-template-columns:1fr">
-            <div class="ff"><label>Cellulare o Email</label>
-              <input type="text" id="lC" placeholder="+39 333 000 0000 oppure mario@email.it" required>
-            </div>
+            <div class="ff"><label>Cellulare o Email</label><input type="text" id="lC" placeholder="+39 333 000 0000 oppure mario@email.it" required></div>
           </div>
           <div style="margin-bottom:16px"></div>
-          <button type="submit" class="btn-p" id="btnL">Accedi →</button>
+          <button type="submit" class="btn-p" id="btnL">Accedi e vedi i gusti →</button>
         </form>
         <p style="text-align:center;font-size:12px;color:var(--cream2);margin-top:14px">Non sei iscritto? <a href="#" style="color:var(--gold)" onclick="switchAuth('reg',null)">Registrati gratis →</a></p>
       </div>
@@ -551,74 +545,92 @@ db.collection('config').doc('promozioni').get().then(function(s){
         <div class="qr-box"><div id="qrDiv"></div></div>
         <div class="qr-code" id="qrCod"></div>
         <p style="font-size:12px;color:var(--cream2);margin-bottom:16px">🎁 <b>10 punti</b> di benvenuto · Livello: <b style="color:var(--gold)">Esploratore</b></p>
-        <button class="btn-ordina-ora" onclick="mostraConf()">Ordina la tua vaschetta →</button>
+        <button class="btn-ordina-ora" onclick="mostraLoggedIn()">Vedi i gusti e ordina →</button>
       </div>
     </div>
   </div>
 
-  <!-- CONFIGURATORE (solo per utenti loggati) -->
-  <div class="conf" id="conf">
-    <div class="conf-hd">
-      <h2>Il tuo <em>ordine</em></h2>
-      <p id="confSal"></p>
+  <!-- SEZIONE UTENTE LOGGATO: gusti + ordine -->
+  <div id="secLoggato" style="display:none">
+
+    <!-- Griglia gusti -->
+    <div class="sec-hd"><h2>I gusti di <em>oggi</em></h2></div>
+    <div class="gusti-grid" id="gustiGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--cream2);font-size:13px">Caricamento gusti...</div>
     </div>
 
-    <div class="step-b">
-      <div class="step-h"><div class="sn">1</div><div><div class="st">Scegli la <em>vaschetta</em></div><div class="ss">Dimensione e numero di gusti</div></div></div>
-      <div class="sc-info" id="scInfo"></div>
-      <div class="vaschette">
-        <div class="vaschetta" data-p="16" data-s="2" onclick="sceldiV(this)">
-          <span class="v-sz">Piccola</span><span class="v-ps">~500g</span>
-          <span class="v-pr" id="vp0">€ 16</span><span class="v-pr-o" id="vo0"></span><span class="v-pr-s" id="vs0"></span>
-          <span class="v-sl">fino a 2 gusti</span><span class="sc-badge" id="vb0"></span>
-        </div>
-        <div class="vaschetta" data-p="23" data-s="3" onclick="sceldiV(this)">
-          <div class="v-pop">Più scelta</div>
-          <span class="v-sz">Media</span><span class="v-ps">~750g</span>
-          <span class="v-pr" id="vp1">€ 23</span><span class="v-pr-o" id="vo1"></span><span class="v-pr-s" id="vs1"></span>
-          <span class="v-sl">fino a 3 gusti</span><span class="sc-badge" id="vb1"></span>
-        </div>
-        <div class="vaschetta" data-p="30" data-s="4" onclick="sceldiV(this)">
-          <span class="v-sz">Grande</span><span class="v-ps">~1kg</span>
-          <span class="v-pr" id="vp2">€ 30</span><span class="v-pr-o" id="vo2"></span><span class="v-pr-s" id="vs2"></span>
-          <span class="v-sl">fino a 4 gusti</span><span class="sc-badge" id="vb2"></span>
+    <!-- Configuratore -->
+    <div class="conf show" id="conf">
+      <div class="conf-hd">
+        <h2>Il tuo <em>ordine</em></h2>
+        <p id="confSal"></p>
+      </div>
+
+      <div class="step-b">
+        <div class="step-h"><div class="sn">1</div><div><div class="st">Scegli la <em>vaschetta</em></div><div class="ss">Dimensione e numero massimo di gusti</div></div></div>
+        <div class="sc-info" id="scInfo"></div>
+        <div class="vaschette">
+          <div class="vaschetta" data-p="16" data-s="3" onclick="sceldiV(this)">
+            <span class="v-sz">Piccola</span><span class="v-ps">~500g</span>
+            <span class="v-pr" id="vp0">€ 16</span><span class="v-pr-o" id="vo0"></span><span class="v-pr-s" id="vs0"></span>
+            <span class="v-sl">fino a 3 gusti</span><span class="sc-badge" id="vb0"></span>
+          </div>
+          <div class="vaschetta" data-p="23" data-s="4" onclick="sceldiV(this)">
+            <div class="v-pop">Più scelta</div>
+            <span class="v-sz">Media</span><span class="v-ps">~750g</span>
+            <span class="v-pr" id="vp1">€ 23</span><span class="v-pr-o" id="vo1"></span><span class="v-pr-s" id="vs1"></span>
+            <span class="v-sl">fino a 4 gusti</span><span class="sc-badge" id="vb1"></span>
+          </div>
+          <div class="vaschetta" data-p="30" data-s="5" onclick="sceldiV(this)">
+            <span class="v-sz">Grande</span><span class="v-ps">~1kg</span>
+            <span class="v-pr" id="vp2">€ 30</span><span class="v-pr-o" id="vo2"></span><span class="v-pr-s" id="vs2"></span>
+            <span class="v-sl">fino a 5 gusti</span><span class="sc-badge" id="vb2"></span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="step-b">
-      <div class="step-h"><div class="sn">2</div><div><div class="st">Scegli i <em>gusti</em></div><div class="ss">Puoi sceglierne meno di quelli disponibili</div></div></div>
-      <div class="slots" id="slots"></div>
-      <div class="slots-info" id="slotsInfo">Seleziona prima una vaschetta</div>
-    </div>
-
-    <div class="step-b">
-      <div class="step-h"><div class="sn">3</div><div><div class="st">Extra <em>opzionali</em></div><div class="ss">Panna e tipo di contenitore</div></div></div>
-      <div class="extras">
-        <div class="extra-c" id="xP" onclick="togP(this)"><span class="ex-em">🍦</span><div class="ex-n">Panna montata</div><div class="ex-note">+ €1,50</div><div class="ex-chk">✓ Aggiunta</div></div>
-        <div class="extra-c" id="xC" onclick="togC(this)"><span class="ex-em">🧇</span><div class="ex-n">Cono/Coppetta</div><div class="ex-note">scegli tipo ↓</div><div class="ex-chk">✓ Selezionato</div></div>
+      <div class="step-b">
+        <div class="step-h"><div class="sn">2</div><div><div class="st">Scegli i <em>gusti</em></div><div class="ss">Puoi sceglierne meno di quelli disponibili</div></div></div>
+        <div class="slots" id="slots"></div>
+        <div class="slots-info" id="slotsInfo">Seleziona prima una vaschetta</div>
       </div>
-      <div id="coniSec" style="display:none">
-        <div class="ex-lbl">Tipo:</div>
-        <div class="coni">
-          <div class="cono-c" onclick="sceldiCono(this,'Cono classico',0)"><span class="cn-em">🍦</span><div class="cn-n">Classico</div></div>
-          <div class="cono-c" onclick="sceldiCono(this,'Cono cialde',1.5)"><span class="cn-em">🧇</span><div class="cn-n">Cialde <span style="color:var(--gold)">+€1,50</span></div></div>
-          <div class="cono-c" onclick="sceldiCono(this,'Coppetta',0)"><span class="cn-em">🥤</span><div class="cn-n">Coppetta</div></div>
+
+      <div class="step-b">
+        <div class="step-h"><div class="sn">3</div><div><div class="st">Extra <em>opzionali</em></div><div class="ss">Aggiunte a pagamento</div></div></div>
+        <div class="extras">
+          <div class="extra-c" id="xP" onclick="togPanna(this)">
+            <span class="ex-em">🍦</span>
+            <div class="ex-n">Vaschetta panna</div>
+            <div class="ex-note">+ €3,50</div>
+            <div class="ex-chk">✓ Aggiunta</div>
+          </div>
+          <div class="extra-c" id="xC" onclick="togCialda(this)">
+            <span class="ex-em">🍡</span>
+            <div class="ex-n">Cialda / Cono</div>
+            <div class="ex-note">+ €0,50</div>
+            <div class="ex-chk">✓ Aggiunto</div>
+          </div>
+          <div class="extra-c" id="xM" onclick="togMini(this)">
+            <span class="ex-em">🧇</span>
+            <div class="ex-n">Mini conetti x9</div>
+            <div class="ex-note">+ €1,50</div>
+            <div class="ex-chk">✓ Aggiunta</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="step-b">
-      <div class="step-h"><div class="sn">4</div><div><div class="st">Note <em>opzionali</em></div><div class="ss">Allergie, richieste, orario di ritiro</div></div></div>
-      <textarea class="note-ta" id="noteOrd" placeholder="Es: allergia alle noci, gusti separati, arrivo alle 16:30..."></textarea>
-    </div>
+      <div class="step-b">
+        <div class="step-h"><div class="sn">4</div><div><div class="st">Note <em>opzionali</em></div><div class="ss">Allergie, richieste, orario di ritiro</div></div></div>
+        <textarea class="note-ta" id="noteOrd" placeholder="Es: allergia alle noci, gusti separati, arrivo alle 16:30..."></textarea>
+      </div>
 
-    <div style="text-align:center">
-      <button class="btn-p" id="btnCart" disabled onclick="addToCart()" style="max-width:360px;margin:0 auto">🛒 Aggiungi al carrello</button>
+      <div style="text-align:center">
+        <button class="btn-p" id="btnCart" disabled onclick="addToCart()" style="max-width:360px;margin:0 auto">🛒 Aggiungi al carrello</button>
+      </div>
     </div>
   </div>
 
-</div>
+</div><!-- /main -->
 
 <!-- CARRELLO -->
 <div class="cart-ov" id="cartOv" onclick="chiudiCart()"></div>
@@ -631,7 +643,7 @@ db.collection('config').doc('promozioni').get().then(function(s){
       <div class="cart-tot"><span class="ct-lbl">Totale</span><span class="ct-val" id="cTot">€ 0,00</span></div>
       <div class="ct-risp" id="cRisp"></div>
       <button class="btn-checkout" onclick="doCheckout()">🔒 Paga con Stripe</button>
-      <p class="cart-note">Ritiro: Piazza Roma 16, Frascati</p>
+      <p class="cart-note">Ritiro: Piazza Roma 16, Frascati · Mar–Dom</p>
     </div>
   </div>
 </div>
@@ -671,77 +683,85 @@ if(!window.PROMOZIONI) window.PROMOZIONI=[];
 var utente=null;
 var carrello=[];
 var promoAttiva=null;
-var vaschSel=null,sels=[],xPanna=false,xCono=null,xConoCosto=0;
+var vaschSel=null,sels=[],xPanna=false,xCialda=false,xMini=false;
 var timerInt=null;
 
 // Ripristina sessione
-try{var u=sessionStorage.getItem('gu');if(u)utente=JSON.parse(u);}catch(e){}
+try{var _u=sessionStorage.getItem('gu');if(_u){utente=JSON.parse(_u);}}catch(e){}
 
-/* ═══ ADMIN ═══ */
-// Admin: sei loggato in WordPress (corpo ha classe logged-in) O hai premuto Ctrl+Shift+G
-function isAdmin(){
-  return document.body.classList.contains('logged-in')||localStorage.getItem('ga')==='1';
-}
+function isAdmin(){return document.body.classList.contains('logged-in')||localStorage.getItem('ga')==='1';}
 
 /* ═══ INIT ═══ */
-document.addEventListener('gustiPronti',function(){disegnaGrid();aggPill();if(isAdmin())renderGusti();});
-document.addEventListener('promoPronte',function(){avviaPromo();if(isAdmin())renderPlist();});
-setTimeout(function(){disegnaGrid();aggPill();avviaPromo();},2800);
+window.addEventListener('load', function(){
+  if(isAdmin()){
+    document.getElementById('adminBar').classList.add('show');
+  }
+  if(utente){
+    mostraLoggedIn();
+  }
+  avviaPromo();
+});
 
-if(isAdmin()) document.getElementById('adminBar').classList.add('show');
-
-// Se già loggato mostra configuratore
-if(utente){
-  mostraUtenteNav();
-  document.getElementById('ctaAccedi').style.display='none';
-  document.getElementById('conf').classList.add('show');
-  document.getElementById('confSal').textContent='Ciao '+utente.nome+'! Configura la tua vaschetta.';
-}
-
-/* ═══ GRIGLIA ═══ */
+/* ═══ GUSTI ═══ */
 function gustiA(){return window.GUSTI.filter(function(g){return g.a&&g.n.trim();});}
-function aggPill(){var n=gustiA().length;document.getElementById('pillN').innerHTML='🍨 <b>'+n+'</b> gusti disponibili oggi';}
+
 function disegnaGrid(){
   var grid=document.getElementById('gustiGrid');
   var lista=gustiA();
-  if(!lista.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--cream2)">Nessun gusto disponibile oggi</div>';return;}
+  if(!lista.length){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--cream2)">Nessun gusto disponibile oggi. Torna presto!</div>';
+    return;
+  }
   grid.innerHTML=lista.map(function(g){
     return '<div class="gc"><span class="gc-em">'+g.e+'</span><div class="gc-n">'+g.n+'</div>'+(g.o?'<span class="gc-off">Offerta</span>':'')+'</div>';
   }).join('');
 }
 
 /* ═══ PROMOZIONI ═══ */
-function avviaPromo(){if(timerInt)clearInterval(timerInt);checkPromo();timerInt=setInterval(checkPromo,10000);}
+function avviaPromo(){
+  if(timerInt)clearInterval(timerInt);
+  checkPromo();
+  timerInt=setInterval(checkPromo,10000);
+}
+
 function checkPromo(){
-  var ora=new Date();var hhmm=ora.getHours()*60+ora.getMinutes();
+  var ora=new Date();
+  var hhmm=ora.getHours()*60+ora.getMinutes();
   var gg=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][ora.getDay()];
   var trovata=null;
   for(var i=0;i<window.PROMOZIONI.length;i++){
-    var p=window.PROMOZIONI[i];if(!p.attiva)continue;
+    var p=window.PROMOZIONI[i];
+    if(!p.attiva) continue;
     if(p.tipo==='spot'){trovata=p;break;}
     if(p.tipo==='fascia'){
-      var giorni=p.giorni?p.giorni.split(','):[];
-      if(giorni.length&&giorni.indexOf(gg)<0)continue;
-      var oi=(p.oraInizio||'00:00').split(':');var of=(p.oraFine||'23:59').split(':');
-      var oiM=parseInt(oi[0])*60+parseInt(oi[1]);var ofM=parseInt(of[0])*60+parseInt(of[1]);
+      var giorni=p.giorni?p.giorni.split(',').map(function(x){return x.trim();}):'';
+      if(giorni.length&&giorni.indexOf(gg)<0) continue;
+      var oi=(p.oraInizio||'00:00').split(':');
+      var of=(p.oraFine||'23:59').split(':');
+      var oiM=parseInt(oi[0])*60+parseInt(oi[1]);
+      var ofM=parseInt(of[0])*60+parseInt(of[1]);
       if(hhmm>=oiM&&hhmm<ofM){trovata=p;break;}
     }
   }
   if(trovata!==promoAttiva){promoAttiva=trovata;aggUIPromo();aggCartUI();}
+  // Countdown
   if(promoAttiva&&promoAttiva.tipo==='fascia'){
     var of2=(promoAttiva.oraFine||'23:59').split(':');
     var fM=parseInt(of2[0])*60+parseInt(of2[1]);
-    var diff=fM-hhmm;
-    var ct=String(Math.max(0,diff)).padStart(2,'0')+':'+String(Math.max(0,59-ora.getSeconds())).padStart(2,'0');
+    var diff=Math.max(0,fM-hhmm);
+    var ct=String(diff).padStart(2,'0')+':'+String(Math.max(0,59-ora.getSeconds())).padStart(2,'0');
     var t1=document.getElementById('ptTimer'),t2=document.getElementById('pbCd');
-    if(t1)t1.textContent=ct;if(t2)t2.textContent=ct;
+    if(t1)t1.textContent=ct; if(t2)t2.textContent=ct;
   }
 }
+
 function aggUIPromo(){
   var ticker=document.getElementById('pticker'),banner=document.getElementById('pbanner');
-  if(!promoAttiva){ticker.classList.remove('show');banner.classList.remove('show');aggPrezziV(0);return;}
+  if(!promoAttiva){
+    ticker.classList.remove('show');banner.classList.remove('show');aggPrezziV(0);return;
+  }
   var sc=promoAttiva.sconto||20,em=promoAttiva.emoji||'🔥';
-  document.getElementById('ptTesto').textContent=em+' '+promoAttiva.titolo+' — -'+sc+'%';
+  document.getElementById('ptTesto').textContent=em+' '+promoAttiva.titolo+' — Sconto -'+sc+'%';
   ticker.classList.add('show');
   document.getElementById('pbIco').textContent=em;
   document.getElementById('pbTit').textContent=promoAttiva.titolo;
@@ -750,15 +770,18 @@ function aggUIPromo(){
   if(promoAttiva.tipo==='fascia')banner.classList.add('show');
   aggPrezziV(sc);
 }
+
 function aggPrezziV(sc){
   [16,23,30].forEach(function(p,i){
-    var vp=document.getElementById('vp'+i),vo=document.getElementById('vo'+i),vs=document.getElementById('vs'+i),vb=document.getElementById('vb'+i);
+    var vp=document.getElementById('vp'+i),vo=document.getElementById('vo'+i),
+        vs=document.getElementById('vs'+i),vb=document.getElementById('vb'+i);
     var si=document.getElementById('scInfo');
     if(sc>0){
-      vp.style.display='none';vo.textContent='€ '+p;vo.style.display='inline';
+      vp.style.display='none';
+      vo.textContent='€ '+p;vo.style.display='inline';
       vs.textContent='€ '+(p*(1-sc/100)).toFixed(2).replace('.',',');vs.style.display='inline';
       vb.textContent='-'+sc+'%';vb.classList.add('show');
-      if(si){si.classList.add('show');si.innerHTML='🔥 <b>Sconto '+sc+'% attivo!</b> Lo sconto sarà applicato automaticamente nel carrello.';}
+      if(si){si.classList.add('show');si.innerHTML='🔥 <b>Sconto '+sc+'% attivo — '+(promoAttiva&&promoAttiva.titolo||'Offerta')+'!</b> Applicato automaticamente nel carrello.';}
     }else{
       vp.style.display='block';vo.style.display='none';vs.style.display='none';vb.classList.remove('show');
       if(si)si.classList.remove('show');
@@ -768,11 +791,12 @@ function aggPrezziV(sc){
 
 /* ═══ AUTH ═══ */
 function apriAuth(tab){
-  document.getElementById('ctaAccedi').style.display='none';
+  document.getElementById('secVisitatore').style.display='none';
   document.getElementById('authWrap').classList.add('show');
   switchAuth(tab,null);
   document.getElementById('authWrap').scrollIntoView({behavior:'smooth'});
 }
+
 function switchAuth(tab,btn){
   document.getElementById('tReg').style.display=tab==='reg'?'block':'none';
   document.getElementById('tLogin').style.display=tab==='login'?'block':'none';
@@ -783,8 +807,8 @@ function switchAuth(tab,btn){
 
 function doReg(e){
   e.preventDefault();
-  var btn=document.getElementById('btnR');
-  var err=document.getElementById('regErr');err.classList.remove('show');
+  var btn=document.getElementById('btnR'),err=document.getElementById('regErr');
+  err.classList.remove('show');
   var nome=document.getElementById('rN').value.trim();
   var cog=document.getElementById('rC').value.trim();
   var tel=document.getElementById('rT').value.trim();
@@ -793,11 +817,10 @@ function doReg(e){
   var mkt=document.getElementById('ckM').checked;
   if(!nome||!cog||!tel||!nasc){err.textContent='Compila tutti i campi obbligatori.';err.classList.add('show');return;}
   btn.disabled=true;btn.innerHTML='<span class="spin"></span> Registrazione...';
-  // Controlla duplicato telefono
   db.collection('clienti').where('telefono','==',tel).limit(1).get().then(function(snap){
     if(!snap.empty){
-      err.textContent='Numero già registrato. Usa "Ho già un account" per accedere.';
-      err.classList.add('show');btn.disabled=false;btn.textContent='Crea account e ricevi il QR →';return;
+      err.textContent='Numero già registrato. Usa "Ho già un account".';err.classList.add('show');
+      btn.disabled=false;btn.textContent='Crea account e ricevi il QR →';return;
     }
     var qrCode='GRD-'+Date.now();
     return db.collection('clienti').add({
@@ -807,13 +830,13 @@ function doReg(e){
     }).then(function(ref){
       utente={id:ref.id,nome:nome,cognome:cog,tel:tel,email:email,punti:10,qrCode:qrCode};
       sessionStorage.setItem('gu',JSON.stringify(utente));
-      mostraUtenteNav();mostraQR(nome,qrCode);
+      mostraQR(nome,qrCode);
       btn.disabled=false;btn.textContent='Crea account e ricevi il QR →';
     });
   }).catch(function(er){
-    console.error(er);
     err.textContent='Errore di rete. Riprova.';err.classList.add('show');
     btn.disabled=false;btn.textContent='Crea account e ricevi il QR →';
+    console.error(er);
   });
 }
 
@@ -828,116 +851,157 @@ function mostraQR(nome,qrCode){
     var c=document.getElementById('qrDiv');c.innerHTML='';
     try{new QRCode(c,{text:qrCode,width:150,height:150,colorDark:'#1a2e1c',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.H});}
     catch(er){c.textContent=qrCode;}
-  },250);
+  },300);
 }
 
 function doLogin(e){
   e.preventDefault();
-  var btn=document.getElementById('btnL');
-  var err=document.getElementById('loginErr');err.classList.remove('show');
+  var btn=document.getElementById('btnL'),err=document.getElementById('loginErr');
+  err.classList.remove('show');
   var cred=document.getElementById('lC').value.trim();
   if(!cred){err.textContent='Inserisci cellulare o email.';err.classList.add('show');return;}
   btn.disabled=true;btn.innerHTML='<span class="spin"></span> Ricerca...';
-  
-  // Cerca prima per telefono, poi per email
-  var cerca=function(campo,valore){
-    return db.collection('clienti').where(campo,'==',valore).limit(1).get();
-  };
-  
-  var primoTentativo=cred.includes('@')?cerca('email',cred):cerca('telefono',cred);
-  primoTentativo.then(function(snap){
+  var isEmail=cred.includes('@');
+  var primo=db.collection('clienti').where(isEmail?'email':'telefono','==',cred).limit(1).get();
+  primo.then(function(snap){
     if(!snap.empty)return snap;
-    // Secondo tentativo: se ha cercato per telefono prova anche email e viceversa
-    if(cred.includes('@'))return cerca('telefono',cred);
-    return cerca('email',cred);
+    // Secondo tentativo campo inverso
+    return db.collection('clienti').where(isEmail?'telefono':'email','==',cred).limit(1).get();
   }).then(function(snap){
     if(snap.empty){
-      err.textContent='Account non trovato. Controlla il numero o l\'email inseriti.';
-      err.classList.add('show');
+      err.textContent='Account non trovato. Controlla i dati inseriti.';err.classList.add('show');
     }else{
       var d=snap.docs[0];var da=d.data();
       utente={id:d.id,nome:da.nome,cognome:da.cognome,tel:da.telefono,email:da.email,punti:da.punti||0,qrCode:da.qrCode};
       sessionStorage.setItem('gu',JSON.stringify(utente));
-      mostraUtenteNav();mostraConf();
+      mostraLoggedIn();
     }
-    btn.disabled=false;btn.textContent='Accedi →';
+    btn.disabled=false;btn.textContent='Accedi e vedi i gusti →';
   }).catch(function(er){
     err.textContent='Errore di rete. Riprova.';err.classList.add('show');
-    btn.disabled=false;btn.textContent='Accedi →';
+    btn.disabled=false;btn.textContent='Accedi e vedi i gusti →';
   });
+}
+
+function mostraLoggedIn(){
+  // Nascondi sezioni login
+  document.getElementById('secVisitatore').style.display='none';
+  document.getElementById('authWrap').classList.remove('show');
+  // Mostra sezione loggato
+  document.getElementById('secLoggato').style.display='block';
+  // Aggiorna nav
+  document.getElementById('navRight').innerHTML=
+    '<span class="gnav-user">👤 <b>'+utente.nome+'</b> · '+utente.punti+' pt</span>'+
+    '<button class="btn-cart" onclick="apriCart()">🛒 <span class="cart-badge" id="cartBadge">'+carrello.length+'</span></button>'+
+    '<button class="btn-logout" onclick="logout()">Esci</button>';
+  // Aggiorna saluto
+  document.getElementById('confSal').textContent='Ciao '+utente.nome+'! Scegli la vaschetta e i gusti.';
+  // Disegna griglia gusti (con dati Firebase se disponibili)
+  disegnaGrid();
+  // Aggiorna prezzi con promo attiva
+  if(promoAttiva)aggPrezziV(promoAttiva.sconto);
 }
 
 function logout(){
   utente=null;sessionStorage.removeItem('gu');
   document.getElementById('navRight').innerHTML='';
-  document.getElementById('ctaAccedi').style.display='block';
+  document.getElementById('secVisitatore').style.display='block';
+  document.getElementById('secLoggato').style.display='none';
   document.getElementById('authWrap').classList.remove('show');
-  document.getElementById('conf').classList.remove('show');
   document.getElementById('qrBen').classList.remove('show');
   document.querySelector('.auth-tabs').style.display='flex';
   document.getElementById('tReg').style.display='block';
   document.getElementById('tLogin').style.display='none';
-}
-
-function mostraUtenteNav(){
-  document.getElementById('navRight').innerHTML=
-    '<span class="gnav-user">👤 <b>'+utente.nome+'</b> · '+utente.punti+' pt</span>'+
-    '<button class="btn-cart" onclick="apriCart()">🛒 <span class="cart-badge" id="cartBadge">0</span></button>'+
-    '<button class="btn-logout" onclick="logout()">Esci</button>';
-}
-
-function mostraConf(){
-  document.getElementById('authWrap').classList.remove('show');
-  document.getElementById('ctaAccedi').style.display='none';
-  document.getElementById('conf').classList.add('show');
-  document.getElementById('confSal').textContent='Ciao '+utente.nome+'! Configura la tua vaschetta.';
-  document.getElementById('conf').scrollIntoView({behavior:'smooth'});
+  carrello=[];
 }
 
 /* ═══ ADMIN GUSTI ═══ */
 function togglePanel(which){
   var pg=document.getElementById('panelGusti'),pp=document.getElementById('panelPromo');
+  var bg=document.getElementById('btnAdmGusti'),bp=document.getElementById('btnAdmPromo');
   if(which==='gusti'){
-    var era=pg.classList.contains('open');
-    pg.classList.toggle('open',!era);pp.classList.remove('open');
-    if(!era)renderGusti();
+    var apri=!pg.classList.contains('open');
+    pg.classList.toggle('open',apri);pp.classList.remove('open');
+    bg.classList.toggle('on',apri);bp.classList.remove('on');
+    if(apri) renderGusti();
   }else{
-    var era2=pp.classList.contains('open');
-    pp.classList.toggle('open',!era2);pg.classList.remove('open');
-    if(!era2)renderPlist();
+    var apri2=!pp.classList.contains('open');
+    pp.classList.toggle('open',apri2);pg.classList.remove('open');
+    bp.classList.toggle('on',apri2);bg.classList.remove('on');
+    if(apri2) renderPlist();
   }
 }
+
 function renderGusti(){
-  var l=document.getElementById('gl');l.innerHTML='';
+  var l=document.getElementById('gl');
+  l.innerHTML='';
   window.GUSTI.forEach(function(g,i){
-    var d=document.createElement('div');
-    d.className='gi'+(g.a?'':' off');
-    d.innerHTML='<label class="sw"><input type="checkbox"'+(g.a?' checked':'')+'><span class="sw-t"></span></label>'
-      +'<input class="gi-e" type="text" value="'+g.e+'" maxlength="2">'
-      +'<input class="gi-n" type="text" value="'+g.n+'" placeholder="Nome gusto">'
-      +'<button class="gi-o'+(g.o?' on':'')+'" onclick="togOff('+i+',this)" title="Segna in offerta">🏷</button>'
-      +'<button class="gi-d" onclick="delG('+i+')">✕</button>';
-    d.querySelector('.sw input').addEventListener('change',function(){
-      window.GUSTI[i].a=this.checked;d.className='gi'+(this.checked?'':' off');
+    var row=document.createElement('div');
+    row.className='gi'+(g.a?'':' off');
+    row.dataset.idx=i;
+
+    var sw=document.createElement('label');
+    sw.className='sw';
+    var inp=document.createElement('input');
+    inp.type='checkbox';
+    if(g.a) inp.checked=true;
+    inp.addEventListener('change',function(){
+      window.GUSTI[i].a=this.checked;
+      row.className='gi'+(this.checked?'':' off');
     });
-    l.appendChild(d);
+    var track=document.createElement('span');
+    track.className='sw-t';
+    sw.appendChild(inp);sw.appendChild(track);
+
+    var emoInput=document.createElement('input');
+    emoInput.className='gi-e';emoInput.type='text';emoInput.value=g.e;emoInput.maxLength=2;
+
+    var nameInput=document.createElement('input');
+    nameInput.className='gi-n';nameInput.type='text';nameInput.value=g.n;nameInput.placeholder='Nome gusto';
+
+    var offBtn=document.createElement('button');
+    offBtn.className='gi-o'+(g.o?' on':'');
+    offBtn.textContent='🏷';offBtn.title='Segna in offerta';
+    offBtn.type='button';
+    offBtn.addEventListener('click',function(){
+      window.GUSTI[i].o=!window.GUSTI[i].o;
+      this.classList.toggle('on',window.GUSTI[i].o);
+    });
+
+    var delBtn=document.createElement('button');
+    delBtn.className='gi-d';delBtn.textContent='✕';delBtn.type='button';
+    delBtn.addEventListener('click',function(){
+      if(!confirm('Eliminare "'+window.GUSTI[i].n+'"?'))return;
+      window.GUSTI.splice(i,1);renderGusti();
+    });
+
+    row.appendChild(sw);row.appendChild(emoInput);row.appendChild(nameInput);row.appendChild(offBtn);row.appendChild(delBtn);
+    l.appendChild(row);
   });
 }
-function togOff(i,btn){window.GUSTI[i].o=!window.GUSTI[i].o;btn.classList.toggle('on',window.GUSTI[i].o);}
-function addGusto(){window.GUSTI.push({n:'Nuovo gusto',e:'🍦',a:true,o:false});renderGusti();document.getElementById('gl').scrollTop=9999;}
-function delG(i){if(!confirm('Eliminare "'+window.GUSTI[i].n+'"?'))return;window.GUSTI.splice(i,1);renderGusti();}
+
+function addGusto(){
+  window.GUSTI.push({n:'Nuovo gusto',e:'🍦',a:true,o:false});
+  renderGusti();
+  document.getElementById('gl').scrollTop=9999;
+}
+
 function saveGusti(){
-  var items=document.querySelectorAll('#gl .gi');
+  var rows=document.querySelectorAll('#gl .gi');
   var nuovi=[];
-  items.forEach(function(item){
-    var chk=item.querySelector('input[type=checkbox]');
-    nuovi.push({e:item.querySelector('.gi-e').value.trim()||'🍦',n:item.querySelector('.gi-n').value.trim()||'Gusto',a:chk.checked,o:item.querySelector('.gi-o').classList.contains('on')});
+  rows.forEach(function(row){
+    var chk=row.querySelector('input[type=checkbox]');
+    var emo=row.querySelector('.gi-e').value.trim()||'🍦';
+    var nom=row.querySelector('.gi-n').value.trim()||'Gusto';
+    var off=row.querySelector('.gi-o').classList.contains('on');
+    nuovi.push({e:emo,n:nom,a:chk.checked,o:off});
   });
   window.GUSTI=nuovi;
   db.collection('config').doc('gusti').set({lista:window.GUSTI,ts:firebase.firestore.FieldValue.serverTimestamp()})
     .then(function(){
       var ok=document.getElementById('sokG');ok.classList.add('show');setTimeout(function(){ok.classList.remove('show');},3000);
-      disegnaGrid();aggPill();if(vaschSel)renderSlots(vaschSel.s);
+      disegnaGrid();
+      if(vaschSel)renderSlots(vaschSel.s);
     }).catch(function(e){alert('Errore salvataggio gusti.');console.error(e);});
 }
 
@@ -948,11 +1012,15 @@ function onTipo(){
   document.getElementById('pGiorni').style.display=t==='fascia'?'block':'none';
   aggPrev();
 }
+
 function getGiorni(){
-  var ids=['gL','gM','gMe','gG','gV','gS','gD'],vals=['Lun','Mar','Mer','Gio','Ven','Sab','Dom'],res=[];
+  var ids=['gL','gM','gMe','gG','gV','gS','gD'];
+  var vals=['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+  var res=[];
   ids.forEach(function(id,i){var el=document.getElementById(id);if(el&&el.checked)res.push(vals[i]);});
   return res;
 }
+
 function aggPrev(){
   var sc=document.getElementById('pSc').value;
   var t=document.getElementById('pTipo').value;
@@ -962,98 +1030,146 @@ function aggPrev(){
   var gd=getGiorni();
   var gdStr=gd.length===7?'Tutti i giorni':gd.join(', ');
   document.getElementById('pPrevIco').textContent=em;
-  document.getElementById('pPrevTxt').textContent='Sconto '+sc+'%'+(t==='fascia'?' · '+oi+'–'+of+' · '+gdStr:' · Spot');
+  document.getElementById('pPrevTxt').textContent='Sconto '+sc+'%'+(t==='fascia'?' · '+oi+'–'+of+' · '+gdStr:' · Spot manuale');
 }
+
 function renderPlist(){
   var l=document.getElementById('plist');
-  if(!window.PROMOZIONI.length){l.innerHTML='<div style="font-size:12px;color:var(--cream3);padding:8px 0">Nessuna promozione.</div>';return;}
+  if(!window.PROMOZIONI.length){
+    l.innerHTML='<div style="font-size:12px;color:var(--cream3);padding:8px 0">Nessuna promozione creata.</div>';return;
+  }
   l.innerHTML=window.PROMOZIONI.map(function(p,i){
-    var tipo=p.tipo==='fascia'?'⏰ '+p.oraInizio+'–'+p.oraFine+(p.giorni?' · '+p.giorni:''):'🔴 Spot';
+    var tipo=p.tipo==='fascia'?'⏰ '+p.oraInizio+'–'+p.oraFine+(p.giorni?' · '+p.giorni:''):'🔴 Spot manuale';
     return '<div class="pi'+(p.attiva?' on':'')+'"><span style="font-size:18px">'+(p.emoji||'🔥')+'</span>'
-      +'<div class="pi-info"><div class="pi-nome">'+p.titolo+' — <b>-'+p.sconto+'%</b></div><div class="pi-det">'+tipo+(p.desc?' · '+p.desc:'')+'</div></div>'
-      +'<button class="pi-b '+(p.attiva?'on':'off')+'" onclick="togP('+i+')">'+(p.attiva?'ATTIVA':'OFF')+'</button>'
-      +'<button class="pi-d" onclick="delP('+i+')">✕</button></div>';
+      +'<div class="pi-info"><div class="pi-nome">'+p.titolo+' — <b>-'+p.sconto+'%</b></div>'
+      +'<div class="pi-det">'+tipo+(p.desc?' · '+p.desc:'')+'</div></div>'
+      +'<button class="pi-b '+(p.attiva?'on':'off')+'" onclick="togPromo('+i+')">'+(p.attiva?'ATTIVA':'OFF')+'</button>'
+      +'<button class="pi-d" onclick="delPromo('+i+')">✕</button></div>';
   }).join('');
 }
+
 function addPromo(){
   var tit=document.getElementById('pTit').value.trim();
-  if(!tit){alert('Inserisci un titolo.');return;}
-  window.PROMOZIONI.push({titolo:tit,desc:document.getElementById('pDes').value.trim(),tipo:document.getElementById('pTipo').value,sconto:parseInt(document.getElementById('pSc').value),emoji:document.getElementById('pEm').value||'🔥',oraInizio:document.getElementById('pOi').value,oraFine:document.getElementById('pOf').value,giorni:getGiorni().join(','),attiva:true});
-  renderPlist();document.getElementById('pTit').value='';document.getElementById('pDes').value='';
+  if(!tit){alert('Inserisci un titolo per la promozione.');return;}
+  window.PROMOZIONI.push({
+    titolo:tit,
+    desc:document.getElementById('pDes').value.trim(),
+    tipo:document.getElementById('pTipo').value,
+    sconto:parseInt(document.getElementById('pSc').value),
+    emoji:document.getElementById('pEm').value||'🔥',
+    oraInizio:document.getElementById('pOi').value,
+    oraFine:document.getElementById('pOf').value,
+    giorni:getGiorni().join(','),
+    attiva:true
+  });
+  renderPlist();
+  document.getElementById('pTit').value='';
+  document.getElementById('pDes').value='';
 }
-function togP(i){window.PROMOZIONI[i].attiva=!window.PROMOZIONI[i].attiva;renderPlist();checkPromo();}
-function delP(i){if(!confirm('Eliminare?'))return;window.PROMOZIONI.splice(i,1);renderPlist();checkPromo();}
+
+function togPromo(i){window.PROMOZIONI[i].attiva=!window.PROMOZIONI[i].attiva;renderPlist();checkPromo();}
+function delPromo(i){if(!confirm('Eliminare questa promozione?'))return;window.PROMOZIONI.splice(i,1);renderPlist();checkPromo();}
+
 function savePromo(){
   db.collection('config').doc('promozioni').set({lista:window.PROMOZIONI,ts:firebase.firestore.FieldValue.serverTimestamp()})
     .then(function(){
       var ok=document.getElementById('sokP');ok.classList.add('show');setTimeout(function(){ok.classList.remove('show');},3000);
       checkPromo();
-    }).catch(function(e){alert('Errore.');console.error(e);});
+    }).catch(function(e){alert('Errore salvataggio promozioni.');console.error(e);});
 }
 
 /* ═══ CONFIGURATORE ═══ */
 function prSc(p){return promoAttiva?parseFloat((p*(1-promoAttiva.sconto/100)).toFixed(2)):p;}
+
 function sceldiV(el){
   document.querySelectorAll('.vaschetta').forEach(function(v){v.classList.remove('sel');});
   el.classList.add('sel');
-  vaschSel={s:parseInt(el.dataset.s),p:parseInt(el.dataset.p),label:el.querySelector('.v-sz').textContent+' ~'+el.querySelector('.v-ps').textContent};
+  vaschSel={
+    s:parseInt(el.dataset.s),
+    p:parseInt(el.dataset.p),
+    label:el.querySelector('.v-sz').textContent+' ~'+el.querySelector('.v-ps').textContent
+  };
   sels=new Array(vaschSel.s).fill('');
-  renderSlots(vaschSel.s);aggBtnCart();
+  renderSlots(vaschSel.s);
+  aggBtnCart();
 }
+
 function renderSlots(n){
   var opts=gustiA().map(function(g){return '<option value="'+g.n+'">'+g.e+' '+g.n+'</option>';}).join('');
   var c=document.getElementById('slots');c.innerHTML='';
   for(var i=0;i<n;i++){
-    c.innerHTML+='<div class="slot" id="sl'+i+'"><span class="slot-n" id="sn'+i+'">'+(i+1)+'</span>'
-      +'<select class="slot-s" onchange="aggSel('+i+',this.value)"><option value="">— Seleziona gusto —</option>'+opts+'</select>'
+    c.innerHTML+='<div class="slot" id="sl'+i+'">'
+      +'<span class="slot-n" id="sn'+i+'">'+(i+1)+'</span>'
+      +'<select class="slot-s" onchange="aggSel('+i+',this.value)">'
+      +'<option value="">— Seleziona gusto —</option>'+opts+'</select>'
       +'<span class="slot-a">▾</span></div>';
   }
   document.getElementById('slotsInfo').innerHTML='Scegli fino a <b>'+n+'</b> gusti';
 }
+
 function aggSel(i,v){
   sels[i]=v;
   document.getElementById('sl'+i).classList.toggle('ok',v!=='');
   document.getElementById('sn'+i).classList.toggle('on',v!=='');
-  var sc=sels.filter(function(s){return s;}).length,rim=vaschSel.s-sc;
-  document.getElementById('slotsInfo').innerHTML=rim>0?'Puoi aggiungere ancora <b>'+rim+'</b> gusto/i':'<b>✓</b> Gusti selezionati!';
+  var sc=sels.filter(function(s){return s;}).length;
+  var rim=vaschSel.s-sc;
+  document.getElementById('slotsInfo').innerHTML=rim>0
+    ?'Puoi aggiungere ancora <b>'+rim+'</b> gusto/i (o procedi così)'
+    :'<b>✓</b> Gusti selezionati!';
   aggBtnCart();
 }
-function togP2(el){xPanna=el.classList.toggle('sel');}
-function togC(el){var on=el.classList.toggle('sel');document.getElementById('coniSec').style.display=on?'block':'none';if(!on){xCono=null;xConoCosto=0;document.querySelectorAll('.cono-c').forEach(function(c){c.classList.remove('sel');});}}
-function sceldiCono(el,n,c){document.querySelectorAll('.cono-c').forEach(function(x){x.classList.remove('sel');});el.classList.add('sel');xCono=n;xConoCosto=c;}
-function aggBtnCart(){document.getElementById('btnCart').disabled=!(vaschSel&&sels.filter(function(s){return s;}).length>0);}
 
-// Fix: togP per panna usa togP2
-document.getElementById('xP').onclick=function(){togP2(this);};
+function togPanna(el){xPanna=el.classList.toggle('sel');}
+function togCialda(el){xCialda=el.classList.toggle('sel');}
+function togMini(el){xMini=el.classList.toggle('sel');}
+function aggBtnCart(){document.getElementById('btnCart').disabled=!(vaschSel&&sels.filter(function(s){return s;}).length>0);}
 
 /* ═══ CARRELLO ═══ */
 function addToCart(){
   if(!vaschSel)return;
   var scelti=sels.filter(function(s){return s;});
-  var pB=vaschSel.p+(xPanna?1.5:0)+xConoCosto;
-  carrello.push({id:Date.now(),vaschetta:vaschSel.label,gusti:scelti.slice(),panna:xPanna,cono:xCono,note:document.getElementById('noteOrd').value.trim(),pBase:pB,pFin:prSc(pB),sconto:promoAttiva?promoAttiva.sconto:0,promoNome:promoAttiva?promoAttiva.titolo:null});
+  var extra=[];
+  var pExtra=0;
+  if(xPanna){extra.push('Panna +€3,50');pExtra+=3.5;}
+  if(xCialda){extra.push('Cialda/Cono +€0,50');pExtra+=0.5;}
+  if(xMini){extra.push('Mini conetti x9 +€1,50');pExtra+=1.5;}
+  var pB=vaschSel.p+pExtra;
+  var pF=prSc(pB);
+  carrello.push({
+    id:Date.now(),
+    vaschetta:vaschSel.label,
+    gusti:scelti.slice(),
+    extra:extra,
+    note:document.getElementById('noteOrd').value.trim(),
+    pBase:pB,pFin:pF,
+    sconto:promoAttiva?promoAttiva.sconto:0,
+    promoNome:promoAttiva?promoAttiva.titolo:null
+  });
   aggCartUI();aggBadge();apriCart();
   // Reset
-  vaschSel=null;sels=[];xPanna=false;xCono=null;xConoCosto=0;
-  document.querySelectorAll('.vaschetta,.extra-c,.cono-c').forEach(function(v){v.classList.remove('sel');});
-  document.getElementById('coniSec').style.display='none';
+  vaschSel=null;sels=[];xPanna=false;xCialda=false;xMini=false;
+  document.querySelectorAll('.vaschetta').forEach(function(v){v.classList.remove('sel');});
+  document.querySelectorAll('.extra-c').forEach(function(v){v.classList.remove('sel');});
   document.getElementById('slots').innerHTML='';
   document.getElementById('noteOrd').value='';
   document.getElementById('slotsInfo').textContent='Seleziona prima una vaschetta';
   document.getElementById('btnCart').disabled=true;
 }
+
 function aggCartUI(){
   var bd=document.getElementById('cartBd'),ft=document.getElementById('cartFt');
-  if(!carrello.length){bd.innerHTML='<div class="cart-empty"><span class="ce-icon">🛒</span><p>Il carrello è vuoto.</p></div>';ft.style.display='none';return;}
+  if(!carrello.length){
+    bd.innerHTML='<div class="cart-empty"><span class="ce-icon">🛒</span><p>Il carrello è vuoto.</p></div>';
+    ft.style.display='none';return;
+  }
   var html='',totB=0,totF=0,haS=false;
-  if(promoAttiva)html+='<div class="cart-promo">🔥 <b>'+promoAttiva.titolo+'</b> — -<b>'+promoAttiva.sconto+'%</b> applicato</div>';
+  if(promoAttiva)html+='<div class="cart-promo">🔥 <b>'+promoAttiva.titolo+'</b> — <b>-'+promoAttiva.sconto+'%</b> applicato!</div>';
   carrello.forEach(function(item){
     totB+=item.pBase;totF+=item.pFin;if(item.sconto>0)haS=true;
-    var ex=[];if(item.panna)ex.push('Panna +€1,50');if(item.cono)ex.push(item.cono);
     html+='<div class="ci"><div class="ci-top"><div class="ci-nome">Vaschetta '+item.vaschetta+'</div>'
       +'<button class="ci-del" onclick="removeItem('+item.id+')">✕</button></div>'
       +'<div class="ci-det"><b style="color:var(--cream)">Gusti:</b> '+item.gusti.join(', ')
-      +(ex.length?'<br><b style="color:var(--cream)">Extra:</b> '+ex.join(', '):'')
+      +(item.extra&&item.extra.length?'<br><b style="color:var(--cream)">Extra:</b> '+item.extra.join(', '):'')
       +(item.note?'<br><b style="color:var(--cream)">Note:</b> '+item.note:'')+'</div>'
       +'<div class="ci-pr">'+(item.sconto>0?'<span class="ci-orig">€ '+item.pBase.toFixed(2).replace('.',',')+'</span>':'')
       +'<span class="ci-fin">€ '+item.pFin.toFixed(2).replace('.',',')+'</span>'
@@ -1065,14 +1181,25 @@ function aggCartUI(){
   if(haS&&totB>totF){risp.textContent='💚 Risparmi € '+(totB-totF).toFixed(2).replace('.',',')+'!';risp.style.display='block';}
   else risp.style.display='none';
 }
+
 function removeItem(id){carrello=carrello.filter(function(i){return i.id!==id;});aggCartUI();aggBadge();}
 function aggBadge(){var b=document.getElementById('cartBadge');if(b)b.textContent=carrello.length;}
 function apriCart(){document.getElementById('cartDr').classList.add('open');document.getElementById('cartOv').classList.add('show');}
 function chiudiCart(){document.getElementById('cartDr').classList.remove('open');document.getElementById('cartOv').classList.remove('show');}
-function doCheckout(){if(!carrello.length)return;var tot=carrello.reduce(function(s,i){return s+i.pFin;},0);alert('🔒 Stripe in arrivo!\n\nTotale: € '+tot.toFixed(2)+'\n\nIntegrazione Stripe al prossimo step.');}
+function doCheckout(){
+  if(!carrello.length)return;
+  var tot=carrello.reduce(function(s,i){return s+i.pFin;},0);
+  alert('🔒 Pagamento Stripe in arrivo!\n\nTotale: € '+tot.toFixed(2)+'\n\nIntegrazione Stripe al prossimo step.');
+}
 
-/* Admin shortcut */
-document.addEventListener('keydown',function(e){if(e.ctrlKey&&e.shiftKey&&e.key==='G'){localStorage.setItem('ga','1');document.getElementById('adminBar').classList.add('show');alert('Admin attivato!');}});
+/* Admin shortcut Ctrl+Shift+G */
+document.addEventListener('keydown',function(e){
+  if(e.ctrlKey&&e.shiftKey&&e.key==='G'){
+    localStorage.setItem('ga','1');
+    document.getElementById('adminBar').classList.add('show');
+    alert('✓ Modalità admin attivata!');
+  }
+});
 </script>
 </body>
 </html>
