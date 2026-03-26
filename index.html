@@ -1388,57 +1388,50 @@ async function simulaCheckout(){
 
   const tot = carrello.reduce((s,i)=>s+i.prezzoFinale, 0);
   const ordineId = 'ORD-' + Date.now();
-  const ts = new Date().toLocaleString('it-IT');
 
-  // Salva ordine su Firestore
   try {
-    if(window._fbAddDoc && window._fbCol) {
-      await window._fbAddDoc(window._fbCol(window._db, 'ordini'), {
-        ordineId,
-        clienteId: utenteLoggato.id || '',
-        nome: utenteLoggato.nome,
-        cognome: utenteLoggato.cognome || '',
-        telefono: utenteLoggato.telefono || '',
-        email: utenteLoggato.email || '',
-        carrello: JSON.parse(JSON.stringify(carrello)),
-        totale: tot,
-        stato: 'pagato',
-        createdAt: window._fbTS()
-      });
-    }
-  } catch(e) { console.error('Firestore ordine:', e); }
-
-  // Stampa automatica
-  stampaBuonoOrdine(ordineId, ts, tot);
-
-  // Invia QR ordine via WhatsApp tramite n8n
-  try {
-    await fetch('https://greed.app.n8n.cloud/webhook/greed-ordine-confermato', {
+    // Chiama Firebase Function per creare sessione Stripe
+    const resp = await fetch('https://europe-west3-club-greed.cloudfunctions.net/creaSessioneStripe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ordineId,
-        nome: utenteLoggato.nome,
-        telefono: utenteLoggato.telefono,
-        totale: tot.toFixed(2),
+        totale: tot,
         carrello: carrello.map(i => ({
           vaschetta: i.vaschetta,
-          gusti: i.gusti,
+          gusti: i.gusti || [],
           scorta: i.scorta || '',
-          panna: i.panna,
-          miniconi: i.miniconi,
-          cono: i.cono
-        }))
+          panna: i.panna || false,
+          pannaCosto: i.pannaCosto || 0,
+          miniconi: i.miniconi || false,
+          cono: i.cono || null,
+          note: i.note || ''
+        })),
+        cliente: {
+          id: utenteLoggato.id || '',
+          nome: utenteLoggato.nome || '',
+          cognome: utenteLoggato.cognome || '',
+          telefono: utenteLoggato.telefono || '',
+          email: utenteLoggato.email || ''
+        }
       })
     });
-  } catch(e) { console.error('n8n ordine:', e); }
 
-  btn.disabled = false;
-  btn.innerHTML = '🔒 Paga con Stripe';
-  chiudiCarrello();
-  carrello = [];
-  aggiornaCarrelloBadge();
-  alert('✅ Ordine confermato!\n\nRiceverai il QR di ritiro su WhatsApp.\nMostralo in gelateria per ritirare il tuo ordine.');
+    const data = await resp.json();
+
+    if(data.url) {
+      // Reindirizza a Stripe Checkout
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Errore pagamento');
+    }
+
+  } catch(e) {
+    console.error('Errore checkout:', e);
+    alert('Errore nel pagamento: ' + e.message + '\nRiprova o contatta GREED.');
+    btn.disabled = false;
+    btn.innerHTML = '🔒 Paga con Stripe';
+  }
 }
 
 function stampaBuonoOrdine(ordineId, ts, tot){
@@ -1650,6 +1643,23 @@ document.addEventListener('keydown',e=>{
     alert('Modalità admin attivata (Ctrl+Shift+G)');
   }
 });
+
+/* -- Gestione ritorno da Stripe -- */
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var ordine = params.get('ordine');
+  var ordineId = params.get('id');
+  if(ordine === 'success' && ordineId){
+    setTimeout(function(){
+      alert('Pagamento completato! \n\nOrdine: ' + ordineId + '\nRiceverai il QR su WhatsApp per il ritiro.');
+    }, 500);
+  } else if(ordine === 'cancel'){
+    setTimeout(function(){
+      alert('Pagamento annullato. Puoi riprovare quando vuoi.');
+    }, 500);
+  }
+})();
+
 </script>
 </body>
 </html>
