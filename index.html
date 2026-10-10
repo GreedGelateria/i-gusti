@@ -1257,33 +1257,17 @@ async function registrati(e){
   btn.innerHTML = '<span class="spin"></span> Registrazione in corso...';
 
   try{
-    // Controlla se già esiste (per telefono)
-    if(window._fbGetDocs){
-      const q = window._fbQuery(window._fbCol(window._db,'clienti'), window._fbWhere('telefono','==',tel), window._fbLimit(1));
-      const snap = await window._fbGetDocs(q);
-      if(!snap.empty){
-        err.textContent = 'Questo numero è già registrato. Usa "Ho già un account" per accedere.';
-        err.classList.add('show');
-        btn.disabled=false; btn.textContent='Crea account e ottieni il QR →'; return;
-      }
-    }
-
-    const qrCode = 'GRD-' + Date.now();
-    const docRef = await window._fbAddDoc(
-      window._fbCol(window._db,'clienti'),
-      { nome, cognome, email, telefono:tel, dataNascita:nascita,
-        punti:0, qrCode, privacy:true, marketing:mkt, sms:true,
-        createdAt:window._fbTS() }
-    );
-
-    utenteLoggato = { id:docRef.id, nome, cognome, tel, email, punti:0, qrCode };
+    // Iscrizione dal server: controlla i doppioni e crea il cliente
+    const ris = await areaClienti({ azione:'iscrizione', nome, cognome, tel, email, nascita, marketing: mkt });
+    const qrCode = ris.cliente.qrCode;
+    utenteLoggato = { id:ris.cliente.id, nome, cognome, tel, email, punti:0, qrCode };
     sessionStorage.setItem('greed_utente', JSON.stringify(utenteLoggato));
     mostraQRBenvenuto(nome, qrCode);
     mostraUtenteNav();
 
   }catch(err2){
     console.error(err2);
-    err.textContent = 'Errore di rete. Riprova tra qualche secondo.'; err.classList.add('show');
+    err.textContent = err2.utente ? err2.message : 'Errore di rete. Riprova tra qualche secondo.'; err.classList.add('show');
   }
   btn.disabled=false; btn.innerHTML='Crea account e ottieni il QR →';
 }
@@ -1308,6 +1292,16 @@ function mostraQRBenvenuto(nome, qrCode){
   }, 200);
 }
 
+
+/* ── Area clienti sul server: il sito non legge più direttamente il database clienti ── */
+const AREA_CLIENTI_URL = 'https://europe-west3-club-greed.cloudfunctions.net/areaClienti';
+async function areaClienti(dati){
+  const r = await fetch(AREA_CLIENTI_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(dati) });
+  let j = {}; try { j = await r.json(); } catch(e){}
+  if(!r.ok || !j.ok){ const e = new Error(j.error || 'Errore di rete. Riprova.'); e.utente = !!j.error; throw e; }
+  return j;
+}
+
 /* ── LOGIN ── */
 async function login(e){
   e.preventDefault();
@@ -1321,25 +1315,13 @@ async function login(e){
   btn.disabled=true; btn.innerHTML='<span class="spin"></span> Ricerca in corso...';
 
   try{
-    const campo = cred.includes('@') ? 'email' : 'telefono';
-    // Cerca con e senza prefisso +39
-    const variants = cred.includes('@') ? [cred] : [cred, '+39'+cred, '39'+cred];
-    let snap = null;
-    for(const v of variants){
-      const q = window._fbQuery(window._fbCol(window._db,'clienti'), window._fbWhere(campo,'==',v), window._fbLimit(1));
-      snap = await window._fbGetDocs(q);
-      if(!snap.empty) break;
-    }
-    if(snap.empty){
-      err.textContent = 'Account non trovato. Controlla il numero/email o registrati.'; err.classList.add('show');
-    } else {
-      const d = snap.docs[0]; const dati = d.data();
-      utenteLoggato = { id:d.id, nome:dati.nome, cognome:dati.cognome, tel:dati.telefono, email:dati.email, punti:dati.punti||0, qrCode:dati.qrCode };
-      sessionStorage.setItem('greed_utente', JSON.stringify(utenteLoggato));
-      mostraUtenteNav();
-      mostraOrdine();
-    }
-  }catch(er){ err.textContent='Errore di rete. Riprova.'; err.classList.add('show'); }
+    const ris = await areaClienti({ azione:'accesso', credenziale: cred });
+    const c = ris.cliente;
+    utenteLoggato = { id:c.id, nome:c.nome, cognome:c.cognome, tel:c.tel, email:c.email, punti:c.punti||0, qrCode:c.qrCode };
+    sessionStorage.setItem('greed_utente', JSON.stringify(utenteLoggato));
+    mostraUtenteNav();
+    mostraOrdine();
+  }catch(er){ err.textContent = er.utente ? er.message : 'Errore di rete. Riprova.'; err.classList.add('show'); }
   btn.disabled=false; btn.textContent='Accedi →';
 }
 
@@ -1522,19 +1504,12 @@ window.applicaCodicePromo = async function(){
   const btn = document.getElementById('btnApplicaCodice');
   const codice = (inp.value||'').trim().toUpperCase();
   if(!codice){ _codiceMsg('Inserisci un codice.', 'err'); return; }
-  if(!window._fbGetDoc){ _codiceMsg('Servizio non disponibile, riprova.', 'err'); return; }
 
   btn.disabled = true; const txt = btn.textContent; btn.textContent = '...';
   try{
-    const ref  = window._fbDoc(window._db, 'codiciPromo', codice);
-    const snap = await window._fbGetDoc(ref);
-    if(!snap.exists()){ _codiceMsg('Codice non valido.', 'err'); codicePromoAttivo=null; aggiornaCarrelloUI(); return; }
-    const d = snap.data();
-
-    if(d.usato === true){ _codiceMsg('Questo codice è già stato utilizzato.', 'err'); codicePromoAttivo=null; aggiornaCarrelloUI(); return; }
-
-    const scadMs = d.scadenza?.seconds ? d.scadenza.seconds*1000 : (d.scadenza ? new Date(d.scadenza).getTime() : null);
-    if(scadMs && Date.now() > scadMs){ _codiceMsg('Questo codice è scaduto.', 'err'); codicePromoAttivo=null; aggiornaCarrelloUI(); return; }
+    let d;
+    try { d = await areaClienti({ azione:'codicePromo', codice }); }
+    catch(eC){ _codiceMsg(eC.utente ? eC.message : 'Errore nel verificare il codice, riprova.', 'err'); codicePromoAttivo=null; aggiornaCarrelloUI(); return; }
 
     codicePromoAttivo = {
       codice,
@@ -2241,7 +2216,7 @@ async function incrementaDelivery() {
     const ref = window._fbDoc(window._fbDb, 'config', 'delivery');
     const snap = await window._fbGetDoc(ref);
     const cur = snap.exists() && snap.data().data === oggi ? (snap.data().count||0) : 0;
-    await window._fbSetDoc(ref, { data: oggi, count: cur + 1 });
+    await window._fbSetDoc(ref, { data: oggi, count: cur + 1 }, { merge: true });
     deliveryCountOggi = cur + 1;
   } catch(e) {
     console.error('Errore incrementa delivery:', e);
