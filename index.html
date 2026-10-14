@@ -413,6 +413,30 @@ async function caricaPromo(){
 
 caricaGusti();
 caricaPromo();
+
+// 3. ORA FURBA: banner visibile da martedì a venerdì, 10:00-11:00 (ora italiana), se attiva.
+//    Lo sconto del 20% lo applica il server al pagamento.
+let _oraFurbaCfg = null;
+async function caricaOraFurba(){ try{ const s = await getDoc(doc(db,'config','oraFurba')); _oraFurbaCfg = s.exists() ? s.data() : {}; }catch(e){ _oraFurbaCfg = {}; } mostraBannerOraFurba(); }
+function mostraBannerOraFurba(){
+  const ora = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Rome' }));
+  const c = _oraFurbaCfg || {};
+  const giorni = Array.isArray(c.giorni) ? c.giorni : [2,3,4,5];
+  const oraInizio = Number.isInteger(c.ora) ? c.ora : 10;
+  const attiva = c.attiva !== false && giorni.includes(ora.getDay()) && ora.getHours() === oraInizio;
+  let b = document.getElementById('banner-ora-furba');
+  if (!attiva) { if (b) b.remove(); return; }
+  if (!b) {
+    b = document.createElement('div'); b.id = 'banner-ora-furba';
+    b.style.cssText = 'position:sticky;top:0;z-index:9999;background:#c8962b;color:#1b1b1b;text-align:center;padding:10px 14px;font-weight:700;font-size:15px;letter-spacing:.02em';
+    document.body.prepend(b);
+  }
+  const min = 59 - ora.getMinutes();
+  b.textContent = `⚡ ORA FURBA: -20% su tutto l'ordine, applicato al pagamento · ancora ${min} min (fino alle ${oraInizio + 1}:00)`;
+}
+caricaOraFurba();
+setInterval(mostraBannerOraFurba, 30000);
+setInterval(caricaOraFurba, 5 * 60000);
 </script>
 
 <!-- PROMO TICKER (fascia oraria attiva) -->
