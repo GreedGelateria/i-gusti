@@ -678,7 +678,7 @@ setInterval(caricaOraFurba, 5 * 60000);
               <div class="ff"><label>Cognome <span class="req">*</span></label><input type="text" id="rCognome" placeholder="Rossi" required></div>
               <div class="ff"><label>Cellulare <span class="req">*</span></label><input type="tel" id="rTel" placeholder="333 000 0000" required></div>
               <div class="ff"><label>Data di nascita <span class="req">*</span></label><input type="date" id="rNascita" required></div>
-              <div class="ff full"><label>Email <span style="color:var(--cream3);font-size:10px">(opzionale)</span></label><input type="email" id="rEmail" placeholder="mario@email.it"></div>
+              <div class="ff full"><label>Email *</label><input type="email" id="rEmail" placeholder="mario@email.it" required></div>
             </div>
             <div class="check-stack">
               <label class="chk" for="chkP">
@@ -1273,8 +1273,11 @@ async function registrati(e){
   const email   = document.getElementById('rEmail').value.trim();
   const mkt     = document.getElementById('chkM').checked;
 
-  if(!nome||!cognome||!tel||!nascita){
+  if(!nome||!cognome||!tel||!nascita||!email){
     err.textContent = 'Compila tutti i campi obbligatori.'; err.classList.add('show'); return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){
+    err.textContent = 'Inserisci un indirizzo email valido.'; err.classList.add('show'); return;
   }
 
   btn.disabled = true;
