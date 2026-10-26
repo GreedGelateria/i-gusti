@@ -423,7 +423,7 @@ function mostraBannerOraFurba(){
   const c = _oraFurbaCfg || {};
   const giorni = Array.isArray(c.giorni) ? c.giorni : [2,3,4,5];
   const oraInizio = Number.isInteger(c.ora) ? c.ora : 10;
-  const attiva = c.attiva !== false && giorni.includes(ora.getDay()) && ora.getHours() === oraInizio;
+  const attiva = !window._negozioChiuso && c.attiva !== false && giorni.includes(ora.getDay()) && ora.getHours() === oraInizio;
   let b = document.getElementById('banner-ora-furba');
   if (!attiva) { if (b) b.remove(); return; }
   if (!b) {
@@ -2407,6 +2407,41 @@ function apriCarrelloConCheck() {
   aggiornaTotaleCart();
 }
 
+</script>
+
+<!-- CALENDARIO E-COMMERCE: nei giorni segnati chiusi nel CRM non si può ordinare -->
+<script type="module">
+const giornoRoma = d => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome' }).format(d);
+async function controllaCalendario() {
+  let chiusure = [];
+  try {
+    const s = await window._fbGetDoc(window._fbDoc(window._db, 'config', 'calendario'));
+    chiusure = (s.exists() && s.data().chiusure) || [];
+  } catch (e) { console.error('Calendario non leggibile:', e); return; }
+  const set = new Set(chiusure);
+  const oggi = new Date();
+  if (!set.has(giornoRoma(oggi))) return;
+  let r = new Date(oggi.getTime());
+  for (let i = 0; i < 366; i++) { r = new Date(r.getTime() + 86400000); if (!set.has(giornoRoma(r))) break; }
+  const quando = new Intl.DateTimeFormat('it-IT', { timeZone: 'Europe/Rome', weekday: 'long', day: 'numeric', month: 'long' }).format(r);
+  const msg = `Oggi siamo chiusi: gli ordini online riaprono ${quando}.`;
+  window._negozioChiuso = true;
+  document.getElementById('banner-ora-furba')?.remove();
+  // Avviso in alto
+  const b = document.createElement('div');
+  b.id = 'banner-chiuso';
+  b.style.cssText = 'position:sticky;top:0;z-index:10000;background:#d94f38;color:#fff;text-align:center;padding:12px 14px;font-weight:700;font-size:15px';
+  b.textContent = '🔒 ' + msg;
+  document.body.prepend(b);
+  // Pagamenti bloccati
+  const blocca = () => alert(msg);
+  window.simulaCheckout = blocca;
+  window.simulaCheckoutPayPal = blocca;
+  ['btnCheckout', 'btnPayPal'].forEach(id => { const el = document.getElementById(id); if (el) { el.textContent = '🔒 Chiusi oggi'; el.onclick = blocca; } });
+  const nota = document.getElementById('cartNote');
+  if (nota) nota.textContent = msg;
+}
+controllaCalendario();
 </script>
 </body>
 </html>
