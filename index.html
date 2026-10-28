@@ -671,6 +671,7 @@ setInterval(caricaOraFurba, 5 * 60000);
             <span class="ic">🎁</span>
             <p>Con la registrazione entri automaticamente nella <strong>Carta Fedeltà GREED</strong>: punti ad ogni acquisto, regalo di compleanno e accesso anticipato a promozioni.</p>
           </div>
+          <div id="invitoBanner" style="display:none;margin:0 0 14px;padding:12px 14px;border:1.5px solid var(--gold);border-radius:6px;font-size:13px;line-height:1.5"></div>
           <div class="auth-err" id="regErr"></div>
           <form onsubmit="registrati(event)">
             <div class="fg2">
@@ -720,6 +721,7 @@ setInterval(caricaOraFurba, 5 * 60000);
           <p>Il tuo QR personale è pronto. Usalo per i check-in in gelateria e accumula punti fedeltà.</p>
           <div class="qr-box"><div id="qrCodeDiv"></div></div>
           <div class="qr-code-txt" id="qrCodeTxt"></div>
+          <div id="qrCodiceAmico" style="display:none;margin:0 0 16px;padding:12px 14px;border:1.5px dashed var(--gold);border-radius:6px;font-size:13px;line-height:1.55"></div>
           <p style="font-size:12px;color:var(--cream2);margin-bottom:20px">✉️ Scrivi <b>BONUS</b> su WhatsApp per ricevere <b style="color:var(--gold)">20 punti regalo</b>! 🎁</p>
           <button class="btn-ordina-ora" onclick="mostraOrdine()">Ordina la tua vaschetta →</button>
         </div>
@@ -1285,11 +1287,14 @@ async function registrati(e){
 
   try{
     // Iscrizione dal server: controlla i doppioni e crea il cliente
-    const ris = await areaClienti({ azione:'iscrizione', nome, cognome, tel, email, nascita, marketing: mkt });
+    const invito = sessionStorage.getItem('greed_invito') || undefined;
+    const ris = await areaClienti({ azione:'iscrizione', nome, cognome, tel, email, nascita, marketing: mkt, invito });
     const qrCode = ris.cliente.qrCode;
     utenteLoggato = { id:ris.cliente.id, nome, cognome, tel, email, punti:0, qrCode };
     sessionStorage.setItem('greed_utente', JSON.stringify(utenteLoggato));
+    sessionStorage.removeItem('greed_invito');
     mostraQRBenvenuto(nome, qrCode);
+    mostraCodiceAmico(ris.cliente.codiceAmico);
     mostraUtenteNav();
 
   }catch(err2){
@@ -1297,6 +1302,20 @@ async function registrati(e){
     err.textContent = err2.utente ? err2.message : 'Errore di rete. Riprova tra qualche secondo.'; err.classList.add('show');
   }
   btn.disabled=false; btn.innerHTML='Crea account e ottieni il QR →';
+}
+
+/* ── Passaparola: codice amico 20% sul primo acquisto ── */
+function precompilaCodiceAmico(codice){
+  const inp = document.getElementById('codicePromoInput');
+  if(codice && inp && !inp.value) inp.value = codice;
+}
+function mostraCodiceAmico(codice){
+  const box = document.getElementById('qrCodiceAmico');
+  if(!codice || !box) return;
+  box.innerHTML = '🎁 <b>Il tuo regalo di benvenuto: 20% sul primo acquisto</b><br>Codice <b style="color:var(--gold);letter-spacing:.06em">' + codice +
+    '</b><br>Online: è già inserito nel carrello, premi <i>Applica</i>. In gelateria: mostra il tuo QR alla cassa.';
+  box.style.display = 'block';
+  precompilaCodiceAmico(codice);
 }
 
 /* ── QR Benvenuto ── */
@@ -1348,6 +1367,7 @@ async function login(e){
     sessionStorage.setItem('greed_utente', JSON.stringify(utenteLoggato));
     mostraUtenteNav();
     mostraOrdine();
+    precompilaCodiceAmico(c.codiceAmico);
   }catch(er){ err.textContent = er.utente ? er.message : 'Errore di rete. Riprova.'; err.classList.add('show'); }
   btn.disabled=false; btn.textContent='Accedi →';
 }
@@ -2442,6 +2462,28 @@ async function controllaCalendario() {
   if (nota) nota.textContent = msg;
 }
 controllaCalendario();
+</script>
+
+<!-- PASSAPAROLA: arrivo dal link personale di un cliente (?invito=CODICE) -->
+<script type="module">
+(async function(){
+  const codice = (new URLSearchParams(location.search).get('invito') || '').trim().toUpperCase();
+  if (!/^[A-Z0-9]{6}$/.test(codice)) return;
+  try {
+    const r = await areaClienti({ azione:'invito', codice });
+    sessionStorage.setItem('greed_invito', codice);
+    const box = document.getElementById('invitoBanner');
+    if (box) {
+      const chi = r.nome ? `<b>${r.nome.replace(/[<>&"]/g, '')}</b> ti ha invitato` : 'Sei stato invitato';
+      box.innerHTML = `🎁 ${chi} al Club GREED!<br>Iscriviti qui sotto: ricevi il <b>${r.sconto}% sul primo acquisto</b>, online o in gelateria.`;
+      box.style.display = 'block';
+    }
+    if (!sessionStorage.getItem('greed_utente')) {
+      if (typeof switchAuthTab === 'function') switchAuthTab('reg', null);
+      document.getElementById('authSection')?.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+  } catch (e) { console.warn('Invito non valido:', e.message); }
+})();
 </script>
 </body>
 </html>
